@@ -401,9 +401,14 @@
 </footer>
 
 
-<script src="products.js"></script>
 <script src="app-new.js"></script>
 <div class="wishlist-overlay" id="wlOverlay"></div>
+
+<script>
+  window.onAuraReady(() => {
+    try { AURA.renderHome(); } catch(e) { console.error('Home render failed', e); }
+  });
+</script>
 
 <div class="wishlist-sidebar" id="wlSidebar">
   <div class="wishlist-header">

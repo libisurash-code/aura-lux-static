@@ -1,8 +1,17 @@
 // ============== AURA LUX — app-new.js (FIXED) ==============
 
+if (window.__AURA_LOADED) {
+  console.warn("AURA already initialized — skipping duplicate load.");
+} 
+window.__AURA_LOADED = true;
+
 const WHATSAPP_NUMBER = window.WHATSAPP_NUMBER || "919539600019";
-const GOOGLE_SHEET_PERFUMES_URL = window.GOOGLE_SHEET_PERFUMES_URL || `https://docs.google.com/spreadsheets/d/${window.GOOGLE_SHEET_ID_PERFUMES || ""}/gviz/tq?tqx=out:csv&sheet=perfumes`;
-const GOOGLE_SHEET_COMBO_URL = window.GOOGLE_SHEET_COMBO_URL || `https://docs.google.com/spreadsheets/d/${window.GOOGLE_SHEET_ID_COMBO || ""}/gviz/tq?tqx=out:csv&sheet=combo`;
+// Default to the published CSV URL provided by the owner. Can be overridden via window.GOOGLE_SHEET_PERFUMES_URL
+const GOOGLE_SHEET_PERFUMES_URL = window.GOOGLE_SHEET_PERFUMES_URL || `https://docs.google.com/spreadsheets/d/e/2PACX-1vTvs4joWqG7VkzwPE5Y9xU8Rw5LW9sWe57bXIeWcBNrBXhh-VlkoFiXtsms9gJDK2rjFT6DNBQ8Txmq/pub?output=csv`;
+const GOOGLE_SHEET_COMBO_URL = window.GOOGLE_SHEET_COMBO_URL || (window.GOOGLE_SHEET_COMBO_URL || "");
+
+// Small inline SVG data-URL used as a safe placeholder when an image file is missing.
+const PLACEHOLDER_IMAGE = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#f4f0ea"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9a8878" font-family="Arial,Helvetica,sans-serif" font-size="28">No Image</text></svg>');
 
 const buyOnWhatsApp = (name) => {
   const msg = encodeURIComponent(`Hi, I want to buy ${name} from Aura Lux.`);
@@ -83,8 +92,8 @@ let COMBOS = [];
 let CATEGORIES = [];
 
 // ===== IMAGE PATH RESOLVER =====
-const resolveImagePath = (filename, folder = "perfume") => {
-  if (!filename) return `images/${folder}/placeholder.png`;
+const resolveImagePath = (filename, folder = "perfumes") => {
+  if (!filename) return PLACEHOLDER_IMAGE;
   const clean = String(filename).trim();
   if (/^https?:\/\//.test(clean)) return clean;
   if (clean.startsWith("images/")) return clean;
@@ -126,7 +135,9 @@ const buildComboFromSheet = (item, index) => {
 // ===== FETCH =====
 const fetchPerfumesFromSheet = async () => {
   try {
-    const csv = await cachedFetchText(GOOGLE_SHEET_PERFUMES_URL, "aura-perfumes-cache");
+    // Append timestamp to force a fresh CSV fetch (cache-busting). Store result in local cache as fallback.
+    const url = GOOGLE_SHEET_PERFUMES_URL + (GOOGLE_SHEET_PERFUMES_URL.includes("?") ? "&" : "?") + "t=" + Date.now();
+    const csv = await cachedFetchText(url, "aura-perfumes-cache", 0);
     const rows = parseCSV(csv);
     const perfumes = rows.map(buildPerfumeFromSheet).filter(Boolean);
     if (perfumes.length === 0) throw new Error("No valid perfumes found in sheet");
@@ -142,7 +153,9 @@ const fetchPerfumesFromSheet = async () => {
 
 const fetchCombosFromSheet = async () => {
   try {
-    const csv = await cachedFetchText(GOOGLE_SHEET_COMBO_URL, "aura-combos-cache");
+    if (!GOOGLE_SHEET_COMBO_URL) return [];
+    const url = GOOGLE_SHEET_COMBO_URL + (GOOGLE_SHEET_COMBO_URL.includes("?") ? "&" : "?") + "t=" + Date.now();
+    const csv = await cachedFetchText(url, "aura-combos-cache", 0);
     const rows = parseCSV(csv);
     const combos = rows.map(buildComboFromSheet).filter(Boolean);
     COMBOS.splice(0, COMBOS.length, ...combos);
@@ -202,9 +215,9 @@ function renderWishlistSidebar() {
   itemsEl.innerHTML = list.map((item, idx) => `
     <div class="wishlist-item" data-idx="${idx}">
       <img
-        src="${item.image || 'images/perfume/placeholder.png'}"
+        src="${item.image || PLACEHOLDER_IMAGE}"
         alt="${esc(item.name)}"
-        onerror="this.src='images/perfume/placeholder.png'"
+        onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'"
       >
       <div class="wishlist-item-info">
         <div class="wishlist-item-name">${esc(item.name)}</div>
@@ -311,7 +324,7 @@ function productCardHTML(p) {
   const price30ml  = prices["30ml"]  || 0;
   const price50ml  = prices["50ml"]  || 0;
   const price100ml = prices["100ml"] || 0;
-  const bottleImage = p.bottleImage || `images/perfume/placeholder.png`;
+  const bottleImage = p.bottleImage || PLACEHOLDER_IMAGE;
 
   return `<div class="card" data-product-name="${esc(p.name)}">
     ${badge}
@@ -321,8 +334,8 @@ function productCardHTML(p) {
       data-price="${price20ml}"
       aria-label="Save to wishlist">${isLiked ? "♥" : "♡"}</button>
     <div class="img-wrap">
-      <img src="${bottleImage}" alt="${esc(p.name)}" loading="lazy"
-           onerror="this.src='images/perfume/placeholder.png'">
+       <img src="${bottleImage}" alt="${esc(p.name)}" loading="lazy"
+         onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
     </div>
     <div class="body">
       <div>
@@ -345,8 +358,8 @@ function productCardHTML(p) {
 function comboCardHTML(c) {
   return `<div class="combo">
     <div class="img-wrap">
-      <img src="${c.image}" alt="${esc(c.name)}" loading="lazy"
-           onerror="this.src='images/combo/placeholder.png'">
+       <img src="${c.image || PLACEHOLDER_IMAGE}" alt="${esc(c.name)}" loading="lazy"
+         onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
     </div>
     <div class="body">
       <span class="offer">${esc(c.offer)}</span>
@@ -606,6 +619,8 @@ function initScrollTop() {
 
 // ===== BOOT =====
 document.addEventListener("DOMContentLoaded", () => {
+  if (window.__AURA_BOOTED) return;
+  window.__AURA_BOOTED = true;
   // Year
   const y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();

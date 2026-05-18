@@ -94,12 +94,11 @@
   </div>
 </div>
 
-<script src="products.js"></script>
 <script src="app-new.js"></script>
 <script>
-  window.onAuraReady = function() {
-    initStorePage({source:PERFUMES,pageSize:9});
-  };
+  window.onAuraReady(() => {
+    AURA.initStorePage({ source: AURA.PERFUMES(), pageSize: 9 });
+  });
 </script>
 
 </body>

@@ -74,7 +74,13 @@
 </button>
 <script src="app-new.js"></script>
 <script>
-  
+  // Initialize store once AURA data is ready. Uses live Google Sheets CSV (cache-busted).
+  window.onAuraReady(() => {
+    // Ensure the latest data is fetched and then initialize the store UI.
+    (AURA.fetchPerfumesFromSheet || (() => Promise.resolve()))()
+      .catch(() => {})
+      .then(() => AURA.initStorePage({ source: AURA.PERFUMES(), pageSize: 12 }));
+  });
 </script>
 
 <div class="wishlist-overlay" id="wlOverlay"></div>
@@ -96,64 +102,6 @@
   </div>
 </div>
 
-<script>
-async function loadProducts() {
-
-  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvs4joWqG7VkzwPE5Y9xU8Rw5LW9sWe57bXIeWcBNrBXhh-VlkoFiXtsms9gJDK2rjFT6DNBQ8Txmq/pub?output=csv";
-
-  const response = await fetch(csvUrl + "&t=" + new Date().getTime());
-  const csvText = await response.text();
-
-  const rows = csvText.trim().split("\n").slice(1);
-
-  const productGrid = document.getElementById("productGrid");
-
-  productGrid.innerHTML = "";
-
-  rows.forEach(row => {
-
-    const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-
-    if (!cols || cols.length < 7) return;
-
-    const clean = (text) =>
-      text.replace(/^"|"$/g, "").trim();
-
-    const name = clean(cols[0]);
-    const price20 = clean(cols[1]);
-    const price30 = clean(cols[2]);
-    const price50 = clean(cols[3]);
-    const price100 = clean(cols[4]);
-    const category = clean(cols[5]);
-    const image = clean(cols[6]);
-
-    productGrid.innerHTML += `
-      <div class="product-card glass">
-
-        <img src="images/perfumes/${image}"
-             alt="${name}"
-             loading="lazy">
-
-        <div class="product-info">
-
-          <p class="product-category">${category}</p>
-
-          <h3>${name}</h3>
-
-          <div class="price-list">
-            <p>20ml — ₹${price20}</p>
-            <p>30ml — ₹${price30}</p>
-            <p>50ml — ₹${price50}</p>
-            <p>100ml — ₹${price100}</p>
-          </div>
-
-        </div>
-      </div>
-    `;
-  });
-}
-
-loadProducts();
-</script>
+<!-- Product rendering is handled by app-new.js -->
 </body>
 </html>
