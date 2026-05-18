@@ -101,7 +101,7 @@ async function loadProducts() {
 
   const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvs4joWqG7VkzwPE5Y9xU8Rw5LW9sWe57bXIeWcBNrBXhh-VlkoFiXtsms9gJDK2rjFT6DNBQ8Txmq/pub?output=csv";
 
-  const response = await fetch(csvUrl);
+  const response = await fetch(csvUrl + "&t=" + new Date().getTime());
   const csvText = await response.text();
 
   const rows = csvText.trim().split("\n").slice(1);
