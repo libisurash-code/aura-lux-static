@@ -72,13 +72,9 @@
 <button id="fabWA" class="fab" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 32 32" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.4.4.4 7.4.4 16c0 2.8.7 5.5 2.1 7.9L.3 31.6l7.9-2.1c2.3 1.3 4.9 1.9 7.7 1.9 8.6 0 15.6-7 15.6-15.6S24.6.4 16 .4zm0 28.4c-2.5 0-4.9-.7-7-1.9l-.5-.3-4.7 1.2 1.3-4.6-.3-.5C3.5 20.6 2.8 18.3 2.8 16 2.8 8.7 8.7 2.8 16 2.8s13.2 5.9 13.2 13.2c0 7.3-5.9 12.8-13.2 12.8zm7.6-9.6c-.4-.2-2.5-1.2-2.8-1.4-.4-.1-.7-.2-.9.2-.3.4-1 1.4-1.3 1.6-.2.3-.4.3-.8.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7-.1-.2-.9-2.2-1.2-3-.3-.8-.7-.7-.9-.7h-.8c-.3 0-.7.1-1 .5-.3.4-1.3 1.3-1.3 3.2s1.4 3.7 1.6 4c.2.3 2.8 4.3 6.7 6 4 1.7 4 1.1 4.7 1 .7-.1 2.4-1 2.7-1.9.3-1 .3-1.8.2-1.9-.1-.2-.4-.3-.8-.5z"/></svg>
 </button>
-
-<script src="products.js"></script>
 <script src="app-new.js"></script>
 <script>
-  window.onAuraReady(function() {
-    initStorePage({ source: AURA.ALL_PRODUCTS(), pageSize: 12 });
-  });
+  
 </script>
 
 <div class="wishlist-overlay" id="wlOverlay"></div>
@@ -100,5 +96,64 @@
   </div>
 </div>
 
+<script>
+async function loadProducts() {
+
+  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvs4joWqG7VkzwPE5Y9xU8Rw5LW9sWe57bXIeWcBNrBXhh-VlkoFiXtsms9gJDK2rjFT6DNBQ8Txmq/pub?output=csv";
+
+  const response = await fetch(csvUrl);
+  const csvText = await response.text();
+
+  const rows = csvText.trim().split("\n").slice(1);
+
+  const productGrid = document.getElementById("productGrid");
+
+  productGrid.innerHTML = "";
+
+  rows.forEach(row => {
+
+    const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+
+    if (!cols || cols.length < 7) return;
+
+    const clean = (text) =>
+      text.replace(/^"|"$/g, "").trim();
+
+    const name = clean(cols[0]);
+    const price20 = clean(cols[1]);
+    const price30 = clean(cols[2]);
+    const price50 = clean(cols[3]);
+    const price100 = clean(cols[4]);
+    const category = clean(cols[5]);
+    const image = clean(cols[6]);
+
+    productGrid.innerHTML += `
+      <div class="product-card glass">
+
+        <img src="images/perfumes/${image}"
+             alt="${name}"
+             loading="lazy">
+
+        <div class="product-info">
+
+          <p class="product-category">${category}</p>
+
+          <h3>${name}</h3>
+
+          <div class="price-list">
+            <p>20ml — ₹${price20}</p>
+            <p>30ml — ₹${price30}</p>
+            <p>50ml — ₹${price50}</p>
+            <p>100ml — ₹${price100}</p>
+          </div>
+
+        </div>
+      </div>
+    `;
+  });
+}
+
+loadProducts();
+</script>
 </body>
 </html>
