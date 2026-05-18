@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Special Perfumes — Aura Lux | Hand-Picked Luxury</title>
+<meta name="description" content="Explore Aura Lux Special Perfumes — a hand-picked, limited collection of luxury fragrances at ₹1000.">
+<link rel="canonical" href="special.html">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="assets/ourcollection.png" type="image/png">
+</head>
+<body>
+<header class="nav glass">
+  <div class="nav-inner">
+    <a class="brand" href="./"><span class="text-gold">Aura</span> Lux</a>
+    <button class="menu-toggle" aria-label="Toggle Menu">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+    <nav class="nav-links">
+      <a href="./">Home</a>
+      <a href="store.html">Store</a>
+      <a class="gold-hover" href="special.html">Special</a>
+      <a href="index.html#about">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="store-main">
+  <p class="eyebrow">Hand-Picked</p>
+  <h1 class="font-display">Special Perfumes</h1>
+
+  <div class="filters glass">
+    <input id="searchInput" type="search" placeholder="Search perfumes...">
+    <div id="chips" class="chips"></div>
+  </div>
+
+  <p id="emptyState" class="empty" style="display:none">No perfumes found.</p>
+  <div id="productGrid" class="product-grid"></div>
+  <div id="sentinel" style="height:40px"></div>
+  <div id="loadMoreWrap" class="load-more-wrap" style="display:none">
+    <button id="loadMoreBtn" class="btn-load">Load More</button>
+  </div>
+  <p id="countLabel" class="count"></p>
+</main>
+
+<footer>
+  <div class="foot-grid">
+    <div>
+      <p class="foot-brand font-display"><span class="text-gold">Aura</span> Lux</p>
+      <p style="font-size:.7rem;letter-spacing:.4em;text-transform:uppercase">A Scent Beyond Time</p>
+    </div>
+    <div>
+      <p class="gold-link">Visit Us</p>
+      <h5 class="font-display">Aura Lux Boutique</h5>
+      <p>Main Road, Manjeri,<br>Malappuram District,<br>Kerala 676121, India</p>
+      <a class="gold-link" href="https://maps.app.goo.gl/EbSdAhfCdPe2A7Vd9" target="_blank" rel="noreferrer">Open Location →</a>
+    </div>
+    <div>
+      <p class="gold-link">Contact</p>
+      <a href="https://wa.me/919539600019">WhatsApp · +91 95396 00019</a><br>
+      <a href="tel:+919539600019">Call · +91 95396 00019</a>
+      <p style="margin-top:.4rem">Open Daily · 10:00 AM – 9:30 PM</p>
+    </div>
+  </div>
+ <p class="foot-bottom">© <span id="year"></span> Aura Lux. All rights reserved.</p>
+</footer>
+
+<button id="fabWA" class="fab" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.4.4.4 7.4.4 16c0 2.8.7 5.5 2.1 7.9L.3 31.6l7.9-2.1c2.3 1.3 4.9 1.9 7.7 1.9 8.6 0 15.6-7 15.6-15.6S24.6.4 16 .4zm0 28.4c-2.5 0-4.9-.7-7-1.9l-.5-.3-4.7 1.2 1.3-4.6-.3-.5C3.5 20.6 2.8 18.3 2.8 16 2.8 8.7 8.7 2.8 16 2.8s13.2 5.9 13.2 13.2c0 7.3-5.9 12.8-13.2 12.8zm7.6-9.6c-.4-.2-2.5-1.2-2.8-1.4-.4-.1-.7-.2-.9.2-.3.4-1 1.4-1.3 1.6-.2.3-.4.3-.8.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.2.3-.4.4-.7.1-.3 0-.5 0-.7-.1-.2-.9-2.2-1.2-3-.3-.8-.7-.7-.9-.7h-.8c-.3 0-.7.1-1 .5-.3.4-1.3 1.3-1.3 3.2s1.4 3.7 1.6 4c.2.3 2.8 4.3 6.7 6 4 1.7 4 1.1 4.7 1 .7-.1 2.4-1 2.7-1.9.3-1 .3-1.8.2-1.9-.1-.2-.4-.3-.8-.5z"/></svg>
+</button>
+
+<div class="wishlist-overlay" id="wlOverlay"></div>
+
+<button class="wishlist-fab" id="wlFab">
+  ♡ Saved
+  <span class="wishlist-fab-count" id="wlCount">0</span>
+</button>
+
+<div class="wishlist-sidebar" id="wlSidebar">
+  <div class="wishlist-header">
+    <h3>♡ Saved <span id="wlTitle">0 items</span></h3>
+    <button class="wishlist-close" id="wlClose">✕</button>
+  </div>
+  <div class="wishlist-items" id="wlItems"></div>
+  <div class="wishlist-empty" id="wlEmpty">
+    <div class="wishlist-empty-icon">♡</div>
+    <p>Tap the heart on any perfume to save it here</p>
+  </div>
+  <div class="wishlist-footer" id="wlFooter" style="display:none">
+    <p>Send your wishlist to us on WhatsApp</p>
+    <button class="wishlist-wa-btn" id="wlSendWA">Send Wishlist on WhatsApp ↗</button>
+  </div>
+</div>
+
+<script src="products.js"></script>
+<script src="app-new.js"></script>
+<script>
+  window.onAuraReady = function() {
+    initStorePage({source:PERFUMES,pageSize:9});
+  };
+</script>
+
+</body>
+</html>

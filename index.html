@@ -1,0 +1,425 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aura Lux — A Scent Beyond Time | Luxury Perfumes </title>
+<meta name="description" content="Aura Lux — premium luxury perfumes in Angadipuram, Kerala. Hand-blended oud, rose, amber and saffron.">
+<link rel="canonical" href="./">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="assets/ourcollection.png" type="image/png">
+</head>
+<body>
+<button id="scrollTopBtn">↑</button>
+<div id="splash" class="splash">
+  <div class="inner">
+    <p class="eyebrow">Luxury Perfumes</p>
+    <h1>Aura Lux</h1>
+    <hr>
+    <p class="tag">A Scent Beyond Time</p>
+  </div>
+</div>
+
+<header class="nav glass">
+  <div class="nav-inner">
+    <a class="brand-container" href="./">
+      <span class="brand-aura">AURA</span>
+      <span class="brand-lux">LUX</span>
+    </a>
+
+    <div style="display:flex;align-items:center;gap:.75rem;">
+      <button id="wlFab" style="display:flex;align-items:center;gap:.35rem;background:var(--gradient-gold);border:none;border-radius:9999px;padding:.4rem .85rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:#fffaf0;cursor:pointer;font-family:'Inter',sans-serif;">
+        ♡ <span id="wlCount">0</span>
+      </button>
+      <button class="menu-toggle" aria-label="Toggle Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <nav class="nav-links">
+      <a href="./">Home</a>
+      <a href="store.html">Store</a>
+      <a href="special.html">Special</a>
+      <a href="#about">About</a>
+      <button id="wlFabDesktop" onclick="document.getElementById('wlFab').click()" style="display:flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#d4a64f,#8a6826);border:none;border-radius:9999px;padding:.5rem 1.25rem;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:#fffaf0;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;">
+        ♡ Saved <span id="wlCountDesktop" style="background:#fff;color:#8a6826;border-radius:9999px;width:18px;height:18px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">0</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero-split">
+  <!-- LEFT: sliding images -->
+  <div class="hero-split-img">
+    <div class="hero-slider">
+      <div class="hero-slide active" style="background-image:url('assets/hero-3.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('assets/hero2.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('assets/hero22.jpg')"></div>
+    </div>
+    <div class="hero-dots">
+      <button class="hero-dot active"></button>
+      <button class="hero-dot"></button>
+      <button class="hero-dot"></button>
+    </div>
+  </div>
+  <!-- RIGHT: text + animation -->
+  <div class="hero-split-text">
+    <p class="hero-eyebrow">Est. 2024 · Angadipuram, Kerala</p>
+    <h1 class="hero-split-title">A Scent<br><em>Beyond</em><br>Time</h1>
+    <p class="hero-split-sub">Hand-blended oud, rose, amber & saffron.<br>Every signature scent at just affordable prices.</p>
+    <!-- Animated botanical branch -->
+    <svg class="hero-branch" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="branch-main" d="M10 70 Q60 40 100 50 Q140 60 190 20" stroke="#c9a96e" stroke-width="1.2" fill="none"/>
+      <path class="branch-l1" d="M50 55 Q45 35 55 25" stroke="#c9a96e" stroke-width="0.8" fill="none"/>
+      <path class="branch-l2" d="M80 52 Q85 32 95 28" stroke="#c9a96e" stroke-width="0.8" fill="none"/>
+      <path class="branch-l3" d="M130 45 Q125 28 135 20" stroke="#c9a96e" stroke-width="0.8" fill="none"/>
+      <circle class="branch-dot" cx="55" cy="25" r="2.5" fill="#c9a96e"/>
+      <circle class="branch-dot" cx="95" cy="28" r="2" fill="#c9a96e"/>
+      <circle class="branch-dot" cx="135" cy="20" r="2.5" fill="#c9a96e"/>
+    </svg>
+    <a href="store.html" style="display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2rem;background:linear-gradient(135deg,#d4a64f,#8a6826);color:#fff;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;font-weight:600;border-radius:2px;text-decoration:none;transition:transform .3s;">Shop Now &rarr;</a>
+  </div>
+</section>
+
+ <div style="height:3rem;background:var(--bg);"></div>
+ <div class="bottle-animation-strip">
+  <div class="bottle-scene">
+    <div class="bottle-3d">
+      <div class="bottle-body">
+        <div class="bottle-neck"></div>
+        <div class="bottle-cap"></div>
+        <div class="bottle-glass">
+          <div class="bottle-liquid"></div>
+          <div class="bottle-shine"></div>
+          <div class="bottle-shine-2"></div>
+        </div>
+        <div class="bottle-label">
+          <span class="bottle-brand">AURA</span>
+          <span class="bottle-sub">LUX</span>
+        </div>
+      </div>
+    </div>
+    <div class="bottle-shadow"></div>
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+    <div class="particle p5"></div>
+  </div>
+  <div class="bottle-text-side">
+    <p class="bottle-strip-tag">Our Signature</p>
+    <h2 class="bottle-strip-title">Crafted for<br><em>those who</em><br>dare to linger.</h2>
+    <p class="bottle-strip-sub">Every drop. Every note. Every memory.</p>
+  </div>
+</div>
+
+  <div style="height:3rem;background:var(--bg);"></div>
+  <section class="section" style="padding-bottom:0">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Shop By</p>
+        <h3>Categories</h3>
+      </div>
+    </div>
+
+    <div class="cats">
+      <a class="cat" href="store.html?cat=Men"><div class="cat-circle"><div><img src="assets/categorymen.jpg" alt="Men" loading="lazy"></div></div><span>Men</span></a>
+      <a class="cat" href="store.html?cat=Women"><div class="cat-circle"><div><img src="assets/womencategory.jpg" alt="Women" loading="lazy"></div></div><span>Women</span></a>
+      <a class="cat" href="store.html?cat=Unisex"><div class="cat-circle"><div><img src="assets/unisexcategory.jpg" alt="Unisex" loading="lazy"></div></div><span>Unisex</span></a>
+      <a class="cat" href="store.html?cat=Kids%20%2F%20Sweet%20%26%20Soft"><div class="cat-circle"><div><img src="assets/kidscategory.jpg" alt="Kids / Sweet & Soft" loading="lazy"></div></div><span>Kids / Sweet & Soft</span></a>
+      <a class="cat" href="store.html?cat=Oud"><div class="cat-circle"><div><img src="assets/oudcategory.jpg" alt="Oud" loading="lazy"></div></div><span>Oud</span></a>
+      <a class="cat" href="store.html?cat=Daily%20Wear"><div class="cat-circle"><div><img src="assets/dailywearcategory.jpg" alt="Daily Wear" loading="lazy"></div></div><span>Daily Wear</span></a>
+      <a class="cat" href="store.html?cat=Party%20Wear"><div class="cat-circle"><div><img src="assets/partywearcategory.jpg" alt="Party Wear" loading="lazy"></div></div><span>Party Wear</span></a>
+      <a class="cat" href="store.html?cat=Romantic"><div class="cat-circle"><div><img src="assets/romanticcategory.jpg" alt="Romantic" loading="lazy"></div></div><span>Romantic</span></a>
+      <a class="cat" href="store.html?cat=Others"><div class="cat-circle"><div><img src="assets/otherscategory.jpg" alt="Others" loading="lazy"></div></div><span>Others</span></a>
+    </div>
+    <div class="botanical-strip">
+  <div class="botanical-inner">
+    <div class="botanical-left">
+      <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 30 Q50 10 100 30 Q150 50 200 30" stroke="#c9a96e" stroke-width="1" fill="none" opacity="0.6"/>
+        <path d="M20 30 Q40 15 55 22" stroke="#c9a96e" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <path d="M60 28 Q75 12 88 20" stroke="#c9a96e" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <path d="M110 32 Q125 48 138 40" stroke="#c9a96e" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <path d="M145 30 Q160 14 175 22" stroke="#c9a96e" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <circle cx="55" cy="22" r="2" fill="#c9a96e" opacity="0.4"/>
+        <circle cx="88" cy="20" r="1.5" fill="#c9a96e" opacity="0.4"/>
+        <circle cx="138" cy="40" r="2" fill="#c9a96e" opacity="0.4"/>
+        <circle cx="175" cy="22" r="1.5" fill="#c9a96e" opacity="0.4"/>
+        <circle cx="100" cy="30" r="3" fill="#c9a96e" opacity="0.6"/>
+      </svg>
+    </div>
+    <div class="botanical-text">
+      <p class="botanical-tag">Est. 2024 · Angadipuram, Kerala</p>
+      <p class="botanical-quote">Where every scent tells a story</p>
+    </div>
+    <div class="botanical-right">
+      <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M200 30 Q150 10 100 30 Q50 50 0 30" stroke="#c9a96e" stroke-width="1" fill="none" opacity="0.6"/>
+        <path d="M180 30 Q160 15 145 22" stroke="#c9a96e" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <path d="M140 28 Q125 12 112 20" stroke="#c9a96e" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <path d="M90 32 Q75 48 62 40" stroke="#c9a96e" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <path d="M55 30 Q40 14 25 22" stroke="#c9a96e" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <circle cx="145" cy="22" r="2" fill="#c9a96e" opacity="0.4"/>
+        <circle cx="112" cy="20" r="1.5" fill="#c9a96e" opacity="0.4"/>
+        <circle cx="62" cy="40" r="2" fill="#c9a96e" opacity="0.4"/>
+        <circle cx="25" cy="22" r="1.5" fill="#c9a96e" opacity="0.4"/>
+        <circle cx="100" cy="30" r="3" fill="#c9a96e" opacity="0.6"/>
+      </svg>
+    </div>
+  </div>
+</div>
+  </section>
+
+  <section style="background:#fdf8f0;padding:5rem 1.25rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+    
+    <div style="text-align:center;margin-bottom:3.5rem;">
+      <p style="font-size:9px;letter-spacing:5px;text-transform:uppercase;color:#c9a96e;margin-bottom:.5rem">Featured Collection</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:400;color:#2c2218;letter-spacing:.05em">SIGNATURE PERFUMES</h2>
+      <p style="font-size:.85rem;color:#7a6a55;margin-top:.75rem">Three masterpieces. Hand-blended in Kerala. Each one a world of its own.</p>
+    </div>
+
+    <!-- Block 1: Image Left, Text Right -->
+    <div class="sig-block" style="display:grid;grid-template-columns:1fr 1fr;border:1px solid #dcc9a8;margin-bottom:2rem;background:#fff;overflow:hidden;">
+      <div style="position:relative;min-height:420px;overflow:hidden;">
+        <img src="assets/perfume-a.jpg" alt="Aura Noir" style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+      <div style="padding:3rem 2.5rem;display:flex;flex-direction:column;justify-content:center;gap:1rem;border-left:1px solid #dcc9a8;">
+        <span style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#c9a96e">Men's Perfume</span>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:400;color:#2c2218;line-height:1;margin:0">Aura Noir</h2>
+        <p style="font-size:.9rem;color:#7a6a55;font-style:italic;margin:0">Crafted for those who leave an impression.</p>
+        <p style="font-size:.85rem;color:#7a6a55;line-height:1.8;margin:0">Deep woody notes blended with warm amber and refined spice. A statement of quiet power and timeless sophistication. Wear it and let the room remember you.</p>
+        <a href="https://wa.me/919539600019?text=Hi%2C%20I%20want%20to%20buy%20Aura%20Noir" target="_blank" style="display:inline-block;width:fit-content;padding:.85rem 2rem;background:#2c2218;color:#fff;font-size:10px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;margin-top:.5rem">Order on WhatsApp →</a>
+      </div>
+    </div>
+
+    <!-- Block 2: Text Left, Image Right -->
+    <div class="sig-block" style="display:grid;grid-template-columns:1fr 1fr;border:1px solid #dcc9a8;margin-bottom:2rem;background:#fff;overflow:hidden;">
+      <div style="padding:3rem 2.5rem;display:flex;flex-direction:column;justify-content:center;gap:1rem;border-right:1px solid #dcc9a8;">
+        <span style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#c9a96e">Women's Perfume</span>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:400;color:#2c2218;line-height:1;margin:0">Golden Mirage</h2>
+        <p style="font-size:.9rem;color:#7a6a55;font-style:italic;margin:0">Soft elegance wrapped in mystery.</p>
+        <p style="font-size:.85rem;color:#7a6a55;line-height:1.8;margin:0">Floral sweetness layered with sensual vanilla and musk. An intimate fragrance distilled in a luminous, modern silhouette. For the woman who commands attention without a word.</p>
+        <a href="https://wa.me/919539600019?text=Hi%2C%20I%20want%20to%20buy%20Golden%20Mirage" target="_blank" style="display:inline-block;width:fit-content;padding:.85rem 2rem;background:#2c2218;color:#fff;font-size:10px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;margin-top:.5rem">Order on WhatsApp →</a>
+      </div>
+      <div style="position:relative;min-height:420px;overflow:hidden;">
+        <img src="assets/perfume-b.jpg" alt="Golden Mirage" style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+    </div>
+
+    <!-- Block 3: Image Left, Text Right -->
+    <div class="sig-block" style="display:grid;grid-template-columns:1fr 1fr;border:1px solid #dcc9a8;background:#fff;overflow:hidden;">
+      <div style="position:relative;min-height:420px;overflow:hidden;">
+        <img src="assets/perfume-c.jpg" alt="Royal Amber" style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+      <div style="padding:3rem 2.5rem;display:flex;flex-direction:column;justify-content:center;gap:1rem;border-left:1px solid #dcc9a8;">
+        <span style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#c9a96e">Arabian Perfume</span>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:400;color:#2c2218;line-height:1;margin:0">Royal Amber</h2>
+        <p style="font-size:.9rem;color:#7a6a55;font-style:italic;margin:0">Born from the richness of Arabian nights.</p>
+        <p style="font-size:.85rem;color:#7a6a55;line-height:1.8;margin:0">Smoky oud, golden saffron and luxurious oriental depths. A majestic fragrance for the one who commands attention — in every room, in every season, at every hour.</p>
+        <a href="https://wa.me/919539600019?text=Hi%2C%20I%20want%20to%20buy%20Royal%20Amber" target="_blank" style="display:inline-block;width:fit-content;padding:.85rem 2rem;background:#2c2218;color:#fff;font-size:10px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;margin-top:.5rem">Order on WhatsApp →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Curated Pairings</p>
+        <h3>Exclusive Combo Collections</h3>
+        <p class="section-subtitle">Curated fragrance pairings crafted for every mood.</p>
+      </div>
+    </div>
+    <div id="comboScroll" class="hscroll combo-scroll"></div>
+    <div class="luxury-strip">
+  <p class="strip-tag">Crafted with Passion</p>
+  <p class="strip-quote">"Every bottle holds a memory waiting to be made."</p>
+  <p class="strip-sub">— Hand-blended in Kerala</p>
+</div>
+  </section>
+  <div class="editorial-banner">
+  <img src="assets/ourcollection.png" alt="The Ritual">
+  <div class="editorial-overlay"></div>
+  <div class="editorial-text">
+    <p class="editorial-tag">The Ritual</p>
+    <h2 class="editorial-title">A quiet <em>ritual</em> of scent,<br>softness, and presence.</h2>
+    <div class="editorial-links">
+      <a href="store.html">Shop Fragrances ↗</a>
+      <a href="#about">Our Story ↗</a>
+    </div>
+  </div>
+</div>
+
+  <section class="section">
+    <div class="section-head">
+      <div><p class="eyebrow">Perfume Sets</p><h3>Our Collections</h3></div>
+      <a class="see-more" href="store.html">See All →</a>
+    </div>
+    <div id="setsScroll1" class="hscroll"></div>
+    <div class="luxury-strip">
+  <p class="strip-tag">Our Promise</p>
+  <p class="strip-quote">"Luxury is not a price tag. It is a feeling."</p>
+  <p class="strip-sub">— Aura Lux, Angadipuram</p>
+</div>
+  </section>
+  <div class="editorial-banner">
+  <img src="assets/girlspraying.jpg" alt="The Craft">
+  <div class="editorial-overlay"></div>
+  <div class="editorial-text">
+    <p class="editorial-tag">The Craftsmanship</p>
+    <h2 class="editorial-title">Bottled from the<br><em>rarest</em> essences on earth.</h2>
+    <div class="editorial-links">
+      <a href="store.html">Explore Collection ↗</a>
+    </div>
+  </div>
+</div>
+
+  <section class="section why-us">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Why Choose Us</p>
+      <h3>The Aura Lux Promise</h3>
+    </div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">💎</div>
+      <h4>100+ Premium Perfumes</h4>
+      <p>Explore over 100 signature fragrances — from rich Oud to fresh florals — all curated for the finest taste.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">✨</div>
+      <h4>Unmatched Quality</h4>
+      <p>Every bottle is hand-blended using the finest international essences — long-lasting, rich, and luxurious.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🏷️</div>
+      <h4>Affordable Luxury</h4>
+      <p>Premium fragrances shouldn't cost a fortune. Every scent at Aura Lux is affrordable yet luxurious.
+        .</p>
+    </div>
+  </div>
+</section>
+<div class="editorial-banner">
+  <img src="assets/menspray.jpg" alt="Our Community">
+  <div class="editorial-overlay"></div>
+  <div class="editorial-text">
+    <p class="editorial-tag">Our Community</p>
+    <h2 class="editorial-title">Worn by thousands.<br><em>Remembered</em> by all.</h2>
+    <div class="editorial-links">
+      <a href="https://wa.me/919539600019">Talk to Us on WhatsApp ↗</a>
+    </div>
+  </div>
+</div>
+
+  <section id="about" class="about">
+    <div class="about-inner">
+      <p class="eyebrow">About Us</p>
+      <h3 class="font-display">The Aura Lux Story</h3>
+      <div class="about-grid">
+        <div class="about-text fade-in">
+          <p class="eyebrow"></p>
+          <h4></h4>
+          <p></p>
+          <div class="about-dots"></div>
+        </div>
+        <div class="about-img fade-in">
+          <img src="assets/here1.jpeg" alt="" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-grid">
+  <div>
+    <p class="foot-brand font-display"><span class="text-gold">Aura</span> Lux</p>
+    <p style="font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;color:#c9a96e;margin-bottom:1rem">A Scent Beyond Time</p>
+    <p style="font-size:.82rem;color:#9a8878;line-height:1.8;margin-bottom:1.25rem">Kerala's finest luxury perfume boutique. Hand-blended oud, rose, amber and saffron.</p>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+      <a href="https://wa.me/919539600019" target="_blank" style="padding:.5rem 1.25rem;border:1px solid #c9a96e44;border-radius:9999px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c9a96e">WhatsApp</a>
+      <a href="tel:+919539600019" style="padding:.5rem 1.25rem;border:1px solid #c9a96e44;border-radius:9999px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c9a96e">Call Us</a>
+    </div>
+  </div>
+  <div>
+    <p class="gold-link">Quick Links</p>
+    <nav style="display:flex;flex-direction:column;gap:.6rem;margin-top:.75rem">
+      <a href="./" style="font-size:.82rem;color:#9a8878;border-bottom:1px solid #2a2016;padding-bottom:.4rem">Home</a>
+      <a href="store.html" style="font-size:.82rem;color:#9a8878;border-bottom:1px solid #2a2016;padding-bottom:.4rem">All Perfumes</a>
+      <a href="special.html" style="font-size:.82rem;color:#9a8878;border-bottom:1px solid #2a2016;padding-bottom:.4rem">Special Collection</a>
+      <a href="store.html?cat=Men" style="font-size:.82rem;color:#9a8878;border-bottom:1px solid #2a2016;padding-bottom:.4rem">Men's Fragrances</a>
+      <a href="store.html?cat=Women" style="font-size:.82rem;color:#9a8878;border-bottom:1px solid #2a2016;padding-bottom:.4rem">Women's Fragrances</a>
+      <a href="store.html?cat=Wedding" style="font-size:.82rem;color:#9a8878;padding-bottom:.4rem">Wedding Collection</a>
+    </nav>
+  </div>
+  <div>
+    <p class="gold-link">Visit & Contact</p>
+    <div style="display:flex;flex-direction:column;gap:.85rem;margin-top:.75rem">
+      <div style="display:flex;gap:.75rem;align-items:flex-start">
+        <span>📍</span>
+        <p style="font-size:.82rem;color:#9a8878;line-height:1.6">Main Road, Angadipuram,<br>Malappuram District,<br>Kerala 676121, India</p>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:center">
+        <span>📞</span>
+        <a href="tel:+919539600019" style="font-size:.82rem;color:#9a8878">+91 95396 00019</a>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:center">
+        <span>💬</span>
+        <a href="https://wa.me/919539600019" target="_blank" style="font-size:.82rem;color:#9a8878">Chat on WhatsApp</a>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:center">
+        <span>🕐</span>
+        <p style="font-size:.82rem;color:#9a8878">Open Daily · 10:00 AM – 9:30 PM</p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="gold-link">Find Us</p>
+    <div style="margin-top:.75rem;border-radius:.75rem;overflow:hidden;border:1px solid #2a2016">
+      <iframe
+  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.0479862653095!2d76.11901!3d11.108501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba64f51e49fa58b%3A0x123!2sAngadipuram%2C+Kerala+676121!5e0!3m2!1sen!2sin!4v1"
+  width="100%"
+  height="200"
+  style="border:0;display:block"
+  allowfullscreen=""
+  loading="lazy"
+  referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+    </div>
+      <a href="https://maps.app.goo.gl/EbSdAhfCdPe2A7Vd9" target="_blank" rel="noreferrer" style="display:inline-block;margin-top:.75rem;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c9a96e;border-bottom:1px solid #c9a96e44;padding-bottom:2px">Open Location →</a>
+  </div>
+</div>
+<p class="foot-bottom">© <span id="year"></span> Aura Lux · Angadipuram, Kerala · Luxury Perfumes · All rights reserved.</p>
+<p style="text-align:center;font-size:10px;color:#3a3028;letter-spacing:2px;text-transform:uppercase;padding-bottom:1rem">Powered by <span style="color:#c9a96e">Ponnus Gold</span></p>
+</footer>
+
+
+<script src="products.js"></script>
+<script src="app-new.js"></script>
+<div class="wishlist-overlay" id="wlOverlay"></div>
+
+<div class="wishlist-sidebar" id="wlSidebar">
+  <div class="wishlist-header">
+    <h3>♡ Saved <span id="wlTitle">0 items</span></h3>
+    <button class="wishlist-close" id="wlClose">✕</button>
+  </div>
+  <div class="wishlist-items" id="wlItems"></div>
+  <div class="wishlist-empty" id="wlEmpty">
+    <div class="wishlist-empty-icon">♡</div>
+    <p>Tap the heart on any perfume to save it here</p>
+  </div>
+  <div class="wishlist-footer" id="wlFooter" style="display:none">
+    <p>Send your wishlist to us on WhatsApp</p>
+    <button class="wishlist-wa-btn" id="wlSendWA">Send Wishlist on WhatsApp ↗</button>
+  </div>
+</div>
+</body>
+</html>
+
