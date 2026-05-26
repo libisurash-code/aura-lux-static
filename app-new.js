@@ -93,11 +93,35 @@ let CATEGORIES = [];
 
 // ===== IMAGE PATH RESOLVER =====
 const resolveImagePath = (filename, folder = "perfumes") => {
-  if (!filename) return PLACEHOLDER_IMAGE;
-  const clean = String(filename).trim();
-  if (/^https?:\/\//.test(clean)) return clean;
-  if (clean.startsWith("images/")) return clean;
-  return `images/${folder}/${clean}`;
+  if (!filename) return { candidates: [PLACEHOLDER_IMAGE], original: "" };
+  // Remove zero-width / BOM and trim whitespace/newlines
+  let clean = String(filename).replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
+  if (!clean) return { candidates: [PLACEHOLDER_IMAGE], original: filename };
+  if (/^https?:\/\//i.test(clean)) return { candidates: [clean], original: clean };
+  // Strip any leading ./ or / or images/ prefix supplied by sheet
+  clean = clean.replace(/^\.?\/+/, "").replace(/^images\//i, "");
+
+  const base = `images/${folder}/`;
+  const candidates = [];
+  const extMatch = clean.match(/(\.[a-z0-9]{2,5})$/i);
+  if (extMatch) {
+    const name = clean.replace(/^\//, "");
+    candidates.push(base + name);
+    candidates.push(base + name.toLowerCase());
+    candidates.push(base + name.replace(/\s+/g, ""));
+    candidates.push(base + name.replace(/\s+/g, "").toLowerCase());
+  } else {
+    const tried = new Set();
+    [".jpg", ".jpeg", ".png", ".webp", ".avif"].forEach(ext => {
+      [clean, clean.toLowerCase(), clean.replace(/\s+/g, ""), clean.replace(/\s+/g, "").toLowerCase()].forEach(n => {
+        const cand = base + n + ext;
+        if (!tried.has(cand)) { candidates.push(cand); tried.add(cand); }
+      });
+    });
+  }
+  // Debug log to help trace generated candidates
+  console.debug("[Images] resolveImagePath ->", { original: filename, folder, candidates });
+  return { candidates, original: filename };
 };
 
 // ===== PERFUME PARSER =====
@@ -105,7 +129,7 @@ const buildPerfumeFromSheet = (item, index) => {
   const id = String(item.id || `perf-${index}`).trim();
   const name = String(item.name || item.product || item.title || "").trim();
   const category = String(item.category || item.type || item.group || "Others").trim();
-  const image = resolveImagePath(item.image || item.img, "perfume");
+  const image = resolveImagePath(item.image || item.img, "perfumes");
   const parsePrice = (val) => {
     const num = Number(String(val || "0").trim().replace(/[^0-9.]/g, ""));
     return isFinite(num) ? num : 0;
@@ -137,8 +161,10 @@ const fetchPerfumesFromSheet = async () => {
   try {
     // Append timestamp to force a fresh CSV fetch (cache-busting). Store result in local cache as fallback.
     const url = GOOGLE_SHEET_PERFUMES_URL + (GOOGLE_SHEET_PERFUMES_URL.includes("?") ? "&" : "?") + "t=" + Date.now();
+    console.debug('[Data] fetching perfumes CSV:', url);
     const csv = await cachedFetchText(url, "aura-perfumes-cache", 0);
-    const rows = parseCSV(csv);
+    const rows = parseCSV(csv || "");
+    console.debug('[Data] fetched CSV rows:', rows.length);
     const perfumes = rows.map(buildPerfumeFromSheet).filter(Boolean);
     if (perfumes.length === 0) throw new Error("No valid perfumes found in sheet");
     PERFUMES.splice(0, PERFUMES.length, ...perfumes);
@@ -152,17 +178,72 @@ const fetchPerfumesFromSheet = async () => {
 };
 
 const fetchCombosFromSheet = async () => {
+  const combosEl = typeof document !== 'undefined' ? document.getElementById('comboScroll') : null;
+  if (combosEl) combosEl.innerHTML = '<div class="combo-loading" style="padding:1rem;text-align:center;">Loading combos…</div>';
   try {
-    if (!GOOGLE_SHEET_COMBO_URL) return [];
+    if (!GOOGLE_SHEET_COMBO_URL) {
+      // No combo sheet provided — create fallback combos from PERFUMES so the UI remains populated.
+      // This preserves the dynamic perfume loading while restoring the combo section exactly as cards.
+      const fallback = PERFUMES.slice(0, 6).map((p, i) => ({
+        id: `combo-fallback-${i}`,
+        name: p.name ? `${p.name} Pair` : `Combo ${i + 1}`,
+        image: (p.bottleImage && p.bottleImage.candidates) ? p.bottleImage : (Array.isArray(p.bottleImage) ? p.bottleImage : [p.bottleImage || PLACEHOLDER_IMAGE]),
+        price: (p.prices && p.prices["30ml"]) ? String(p.prices["30ml"]) : "0",
+        size: "Combo",
+        offer: p.category || "Special"
+      }));
+      COMBOS.splice(0, COMBOS.length, ...fallback);
+      console.debug('[Combos] using fallback combos derived from PERFUMES', COMBOS.length);
+      console.log('[Combos] data', COMBOS);
+      if (combosEl) combosEl.innerHTML = COMBOS.map(c => `<div>${comboCardHTML(c)}</div>`).join("");
+      return COMBOS;
+    }
     const url = GOOGLE_SHEET_COMBO_URL + (GOOGLE_SHEET_COMBO_URL.includes("?") ? "&" : "?") + "t=" + Date.now();
+    console.debug('[Combos] fetching combos CSV:', url);
     const csv = await cachedFetchText(url, "aura-combos-cache", 0);
-    const rows = parseCSV(csv);
+    const rows = parseCSV(csv || "");
+    console.log('[Combos] raw rows (first 5):', rows.slice(0, 5));
     const combos = rows.map(buildComboFromSheet).filter(Boolean);
     COMBOS.splice(0, COMBOS.length, ...combos);
-    return combos;
+    console.debug('[Combos] parsed combos from sheet:', combos.length);
+    console.log('[Combos] data', COMBOS);
+    if (combosEl) combosEl.innerHTML = COMBOS.map(c => `<div>${comboCardHTML(c)}</div>`).join("");
+    // If sheet provided but returned nothing, attempt fallback from PERFUMES
+    if (COMBOS.length === 0 && PERFUMES.length > 0) {
+      const fallback = PERFUMES.slice(0, 6).map((p, i) => ({
+        id: `combo-fallback-${i}`,
+        name: p.name ? `${p.name} Pair` : `Combo ${i + 1}`,
+        image: (p.bottleImage && p.bottleImage.candidates) ? p.bottleImage : (Array.isArray(p.bottleImage) ? p.bottleImage : [p.bottleImage || PLACEHOLDER_IMAGE]),
+        price: (p.prices && p.prices["30ml"]) ? String(p.prices["30ml"]) : "0",
+        size: "Combo",
+        offer: p.category || "Special"
+      }));
+      COMBOS.splice(0, COMBOS.length, ...fallback);
+      console.debug('[Combos] sheet empty — fallback combos created from PERFUMES', COMBOS.length);
+      console.log('[Combos] data (fallback)', COMBOS);
+      if (combosEl) combosEl.innerHTML = COMBOS.map(c => `<div>${comboCardHTML(c)}</div>`).join("");
+    }
+    return COMBOS;
   } catch (error) {
-    console.error("[Data] Combo fetch failed:", error.message);
-    throw error;
+    console.error("[Data] Combo fetch failed:", error && error.message ? error.message : error);
+    // On failure, fall back to PERFUMES-derived combos so the UI remains usable
+    if (PERFUMES.length > 0) {
+      const fallback = PERFUMES.slice(0, 6).map((p, i) => ({
+        id: `combo-fallback-${i}`,
+        name: p.name ? `${p.name} Pair` : `Combo ${i + 1}`,
+        image: (p.bottleImage && p.bottleImage.candidates) ? p.bottleImage : (Array.isArray(p.bottleImage) ? p.bottleImage : [p.bottleImage || PLACEHOLDER_IMAGE]),
+        price: (p.prices && p.prices["30ml"]) ? String(p.prices["30ml"]) : "0",
+        size: "Combo",
+        offer: p.category || "Special"
+      }));
+      COMBOS.splice(0, COMBOS.length, ...fallback);
+      console.debug('[Combos] fallback created after fetch error', COMBOS.length);
+      console.log('[Combos] data (fallback on error)', COMBOS);
+      if (combosEl) combosEl.innerHTML = COMBOS.map(c => `<div>${comboCardHTML(c)}</div>`).join("");
+      return COMBOS;
+    }
+    if (combosEl) combosEl.innerHTML = '<div class="combo-error" style="padding:1rem;text-align:center;color:#b33;">Failed to load combos</div>';
+    return COMBOS;
   }
 };
 
@@ -215,7 +296,8 @@ function renderWishlistSidebar() {
   itemsEl.innerHTML = list.map((item, idx) => `
     <div class="wishlist-item" data-idx="${idx}">
       <img
-        src="${item.image || PLACEHOLDER_IMAGE}"
+        src="${PLACEHOLDER_IMAGE}"
+        data-candidates='${esc(JSON.stringify((item.image && item.image.candidates) ? item.image.candidates : (Array.isArray(item.image) ? item.image : [item.image || PLACEHOLDER_IMAGE])))}'
         alt="${esc(item.name)}"
         onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'"
       >
@@ -231,8 +313,9 @@ function renderWishlistSidebar() {
       <button class="wishlist-item-remove" data-remove="${idx}" aria-label="Remove">✕</button>
     </div>
   `).join("");
-
   updateWishlistCount();
+  // Resolve wishlist images
+  hydrateImages().catch(e => console.error('[Images] hydrateImages failed', e));
 }
 
 function openWishlist() {
@@ -319,47 +402,72 @@ function initWishlist() {
 function productCardHTML(p) {
   const badge = p.badge ? `<span class="badge">${esc(p.badge)}</span>` : "";
   const isLiked = getWishlist().some(w => w.name === p.name);
-  const prices    = p.prices || { "20ml": 0, "30ml": 0, "50ml": 0, "100ml": 0 };
-  const price20ml  = prices["20ml"]  || 0;
-  const price30ml  = prices["30ml"]  || 0;
-  const price50ml  = prices["50ml"]  || 0;
+
+  const prices = p.prices || { "20ml": 0, "30ml": 0, "50ml": 0, "100ml": 0 };
+  const price20ml = prices["20ml"] || 0;
+  const price30ml = prices["30ml"] || 0;
+  const price50ml = prices["50ml"] || 0;
   const price100ml = prices["100ml"] || 0;
+
   const bottleImage = p.bottleImage || PLACEHOLDER_IMAGE;
+  const bottleCandidates =
+    bottleImage && bottleImage.candidates
+      ? bottleImage.candidates
+      : Array.isArray(bottleImage)
+      ? bottleImage
+      : [bottleImage];
 
   return `<div class="card" data-product-name="${esc(p.name)}">
     ${badge}
+
     <button class="btn-heart ${isLiked ? "liked" : ""}"
       data-name="${esc(p.name)}"
-      data-image="${esc(bottleImage)}"
+      data-image="${esc(bottleCandidates[0] || PLACEHOLDER_IMAGE)}"
       data-price="${price20ml}"
       aria-label="Save to wishlist">${isLiked ? "♥" : "♡"}</button>
+
     <div class="img-wrap">
-       <img src="${bottleImage}" alt="${esc(p.name)}" loading="lazy"
-         onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
+      <img src="${PLACEHOLDER_IMAGE}"
+        data-candidates='${esc(JSON.stringify(bottleCandidates))}'
+        alt="${esc(p.name)}"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
     </div>
+
     <div class="body">
       <div>
         <h4>${esc(p.name)}</h4>
         <p class="cat-label">${esc(p.category || "")}</p>
       </div>
+
       <div class="size-selector" style="display:flex;gap:.4rem;margin-bottom:.75rem;flex-wrap:wrap">
-        <button class="size-btn active" data-size="20ml"  data-price="${price20ml}"  style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:linear-gradient(135deg,#d4a64f,#8a6826);color:#fff;border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">20ml</button>
-        <button class="size-btn"        data-size="30ml"  data-price="${price30ml}"  style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:transparent;color:var(--muted-fg);border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">30ml</button>
-        <button class="size-btn"        data-size="50ml"  data-price="${price50ml}"  style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:transparent;color:var(--muted-fg);border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">50ml</button>
-        <button class="size-btn"        data-size="100ml" data-price="${price100ml}" style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:transparent;color:var(--muted-fg);border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">100ml</button>
+        <button class="size-btn active" data-size="20ml" data-price="${price20ml}" style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:linear-gradient(135deg,#d4a64f,#8a6826);color:#fff;border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">20ml</button>
+
+        <button class="size-btn" data-size="30ml" data-price="${price30ml}" style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:transparent;color:var(--muted-fg);border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">30ml</button>
+
+        <button class="size-btn" data-size="50ml" data-price="${price50ml}" style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:transparent;color:var(--muted-fg);border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">50ml</button>
+
+        <button class="size-btn" data-size="100ml" data-price="${price100ml}" style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:transparent;color:var(--muted-fg);border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">100ml</button>
       </div>
+
       <p class="price">₹${price20ml}</p>
-      <button class="btn-buy" data-buy="${esc(p.name)}" data-price="${price20ml}" data-size="20ml">Buy Now</button>
+
+      <button class="btn-buy"
+        data-buy="${esc(p.name)}"
+        data-price="${price20ml}"
+        data-size="20ml">Buy Now</button>
     </div>
   </div>`;
 }
 
 // ===== UI: COMBO CARD =====
 function comboCardHTML(c) {
+  const comboImg = c.image || PLACEHOLDER_IMAGE;
+  const comboCandidates = (comboImg && comboImg.candidates) ? comboImg.candidates : (Array.isArray(comboImg) ? comboImg : [comboImg]);
   return `<div class="combo">
     <div class="img-wrap">
-       <img src="${c.image || PLACEHOLDER_IMAGE}" alt="${esc(c.name)}" loading="lazy"
-         onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
+      <img src="${PLACEHOLDER_IMAGE}" data-candidates='${esc(JSON.stringify(comboCandidates))}' alt="${esc(c.name)}" loading="lazy"
+           onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
     </div>
     <div class="body">
       <span class="offer">${esc(c.offer)}</span>
@@ -380,6 +488,8 @@ function renderHome() {
   if (combos) {
     combos.innerHTML = COMBOS.map(c => `<div>${comboCardHTML(c)}</div>`).join("");
   }
+  // After inserting HTML, attempt to resolve actual image URLs asynchronously
+  hydrateImages().catch(e => console.error('[Images] hydrateImages failed', e));
 }
 
 // ===== STORE PAGE =====
@@ -474,6 +584,8 @@ function initStorePage(opts) {
     loadWrap.style.display = visible < f.length ? "" : "none";
     countEl.style.display = "";
     countEl.textContent = `Showing ${Math.min(visible, f.length)} of ${f.length}`;
+    // Resolve image URLs for newly rendered items
+    hydrateImages().catch(e => console.error('[Images] hydrateImages failed', e));
   }
 
   document.getElementById("loadMoreBtn").addEventListener("click", () => {
@@ -615,6 +727,45 @@ function initScrollTop() {
     btn.classList.toggle("visible", window.scrollY > 400);
   });
   btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+}
+
+// ===== IMAGE HYDRATOR =====
+async function hydrateImages() {
+  const imgs = Array.from(document.querySelectorAll('img[data-candidates]'));
+  if (!imgs.length) return;
+  for (const img of imgs) {
+    try {
+      const raw = img.getAttribute('data-candidates');
+      if (!raw) continue;
+      const candidates = JSON.parse(raw);
+      let chosen = null;
+      for (const cand of candidates) {
+        if (!cand) continue;
+        try {
+          console.debug('[Images] trying', cand);
+          const res = await fetch(cand, { method: 'HEAD', cache: 'no-store' });
+          if (res && res.ok) { chosen = cand; break; }
+        } catch (headErr) {
+          try {
+            const res2 = await fetch(cand, { method: 'GET', cache: 'no-store' });
+            if (res2 && res2.ok) { chosen = cand; break; }
+          } catch (getErr) {
+            // ignore and try next candidate
+          }
+        }
+      }
+      if (chosen) {
+        img.src = chosen;
+        console.debug('[Images] loaded', chosen, 'for', img.alt || img.dataset.name || 'unknown');
+      } else {
+        img.src = PLACEHOLDER_IMAGE;
+        console.debug('[Images] no candidate found for', img.getAttribute('data-candidates'));
+      }
+    } catch (err) {
+      console.error('[Images] hydrate error', err);
+      img.src = PLACEHOLDER_IMAGE;
+    }
+  }
 }
 
 // ===== BOOT =====

@@ -188,13 +188,13 @@ const buildFallbackCollections = () => {
 };
 
 const resolveSheetImage = (rawValue) => {
-  const raw = String(rawValue || "").trim();
+  const raw = String(rawValue || "").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   if (!raw) return "";
   if (/^(https?:)?\/\//i.test(raw)) return raw;
-  const cleaned = raw.replace(/^\.?\/?/, "");
+  const cleaned = raw.replace(/^\.\/?+/, "").replace(/^\//, "");
   if (cleaned.startsWith("assets/")) return cleaned;
-  if (cleaned.startsWith("images/")) return cleaned.startsWith("./") ? cleaned : `./${cleaned}`;
-  return /\.[a-z]{2,4}$/i.test(cleaned) ? `./images/${cleaned}` : `./images/${cleaned}.png`;
+  if (cleaned.startsWith("images/")) return cleaned;
+  return /\.[a-z]{2,4}$/i.test(cleaned) ? `images/${cleaned}` : `images/${cleaned}.png`;
 };
 
 const buildProductFromSheet = (item, index) => {
@@ -442,24 +442,55 @@ function skeletonHTML(width=""){
   </div>`;
 }
 
-function renderHome(){
-  const sig = document.getElementById("signatureScroll");
-  if(sig){
-    if(SIGNATURE.length){
-      sig.innerHTML = [1,2,3,4].map(()=>skeletonHTML()).join("");
-      setTimeout(()=>{
-        sig.innerHTML = SIGNATURE.map(p=>`<div>${productCardHTML(p)}</div>`).join("");
-      }, 1000);
-    } else {
-      sig.innerHTML = [1,2,3,4].map(()=>skeletonHTML()).join("");
-    }
-  }
+function productCardHTML(p) {
+  const isLiked = getWishlist().some(w => w.name === p.name);
+  const prices = p.prices || { "20ml": 0, "30ml": 0, "50ml": 0, "100ml": 0 };
 
-  const combos = document.getElementById("comboScroll");
-  if(combos) combos.innerHTML = COMBOS.map(c => `<div>${comboCardHTML(c)}</div>`).join("");
+  const bottleImage = p.bottleImage || PLACEHOLDER_IMAGE;
+  const bottleCandidates =
+    bottleImage && bottleImage.candidates
+      ? bottleImage.candidates
+      : Array.isArray(bottleImage)
+      ? bottleImage
+      : [bottleImage];
 
-  const sets1 = document.getElementById("setsScroll1");
-  if(sets1) sets1.innerHTML = PERFUME_SETS.slice(0,8).map(p=>`<div>${productCardHTML(p)}</div>`).join("");
+  return `<div class="card luxury-clean-card" data-product-name="${esc(p.name)}">
+
+    <button class="btn-heart ${isLiked ? "liked" : ""}"
+      data-name="${esc(p.name)}"
+      data-image="${esc(bottleCandidates[0] || PLACEHOLDER_IMAGE)}"
+      data-price="${prices["20ml"] || 0}"
+      aria-label="Save to wishlist">${isLiked ? "♥" : "♡"}</button>
+
+    <div class="clean-img-wrap">
+      <img src="${PLACEHOLDER_IMAGE}"
+        data-candidates='${esc(JSON.stringify(bottleCandidates))}'
+        alt="${esc(p.name)}"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
+    </div>
+
+    <div class="clean-body">
+      <h4>${esc(p.name)}</h4>
+      <p class="clean-category">${esc(p.category || "Eau De Parfum")}</p>
+
+      <p class="price">₹${prices["20ml"] || 0}</p>
+
+      <div class="size-selector clean-sizes">
+        <button class="size-btn active" data-size="20ml" data-price="${prices["20ml"] || 0}">20ml</button>
+        <button class="size-btn" data-size="30ml" data-price="${prices["30ml"] || 0}">30ml</button>
+        <button class="size-btn" data-size="50ml" data-price="${prices["50ml"] || 0}">50ml</button>
+        <button class="size-btn" data-size="100ml" data-price="${prices["100ml"] || 0}">100ml</button>
+      </div>
+
+      <button class="btn-buy clean-buy"
+        data-buy="${esc(p.name)}"
+        data-price="${prices["20ml"] || 0}"
+        data-size="20ml">
+        Order on WhatsApp
+      </button>
+    </div>
+  </div>`;
 }
 
 function initComboSection(){
