@@ -84,6 +84,27 @@
   </div>
 </section>
 
+<section class="memory-text-section">
+  <div class="memory-text-container">
+    <h2>
+      WHERE EVERY 
+      <span class="memory-pill">
+        <img src="assets/womencategory.jpg" alt="">
+      </span>
+      DROP IS A <br>
+
+      PORTAL 
+      <span class="memory-pill vertical">
+        <img src="assets/goldenmirage.png" alt="">
+      </span>
+      TO A HIDDEN 
+
+      <span class="perfume-icon">🧴</span>
+      WORLD
+    </h2>
+  </div>
+</section>
+
   <div style="height:3rem;background:var(--bg);"></div>
   <section class="section" style="padding-bottom:0">
     <div class="section-head">
@@ -194,25 +215,10 @@
     </div>
 
   </div>
-</section>
 
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <p class="eyebrow">Curated Pairings</p>
-        <h3>Exclusive Combo Collections</h3>
-        <p class="section-subtitle">Curated fragrance pairings crafted for every mood.</p>
-      </div>
-    </div>
-    <div id="comboScroll" class="hscroll combo-scroll"></div>
-    <div class="luxury-strip">
-  <p class="strip-tag">Crafted with Passion</p>
-  <p class="strip-quote">"Every bottle holds a memory waiting to be made."</p>
-  <p class="strip-sub">— Hand-blended in Kerala</p>
-</div>
   </section>
   <div class="editorial-banner">
-  <img src="assets/ourcollection.png" alt="The Ritual">
+  <img src="assets/add.png" alt="The Ritual">
   <div class="editorial-overlay"></div>
   <div class="editorial-text">
     <p class="editorial-tag">The Ritual</p>
@@ -224,6 +230,51 @@
   </div>
 </div>
 
+</section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Curated Pairings</p>
+        <h3>Exclusive Combo Collections</h3>
+        <p class="section-subtitle">Curated fragrance pairings crafted for every mood.</p>
+      </div>
+    </div>
+    <div id="comboScroll" class="hscroll combo-scroll"></div>
+    
+    
+    \<section class="luxury-info-grid">
+  
+      <section class="fragrance-editorial">
+  <p class="editorial-small">Product Standard Qualities</p>
+  <h2>The Art Of Fine Fragrance</h2>
+
+  <div class="fragrance-layout">
+    <div class="fragrance-copy top-copy">
+      <h4>Fragrance That Lasts</h4>
+      <p>Crafted with rich perfume oils to leave a soft, memorable trail from day to night.</p>
+    </div>
+
+    <img class="fragrance-img img-one" src="assets/auranoir.png" alt="Aura Lux Perfume">
+
+    <div class="fragrance-copy middle-copy">
+      <h4>Highly Blended Notes</h4>
+      <p>Oud, amber, florals, musk, and vanilla are balanced to create depth and elegance.</p>
+    </div>
+
+    <img class="fragrance-img img-two" src="assets/goldenmirage.png" alt="Aura Lux Perfume">
+
+    <div class="fragrance-copy bottom-copy">
+  <h4>Made For Every Moment</h4>
+  <p>From daily wear to gifting and special evenings, every scent is designed with purpose.</p>
+</div>
+
+</section>
+
+<div class="lux-divider">
+  <span></span>
+</div>
+
   <section class="section">
     <div class="section-head">
       <div><p class="eyebrow">Perfume Sets</p><h3>Our Collections</h3></div>
@@ -232,7 +283,7 @@
     <div id="setsScroll1" class="hscroll"></div>
   </section>
   <div class="editorial-banner">
-  <img src="assets/girlspraying.jpg" alt="The Craft">
+  <img src="assets/hero2.jpg" alt="The Craft">
   <div class="editorial-overlay"></div>
   <div class="editorial-text">
     <p class="editorial-tag">The Craftsmanship</p>
@@ -281,29 +332,88 @@
   </div>
 </div>
 
-  <div class="about-grid">
+<section class="about-slider-section" id="about">
 
-  <div class="about-text fade-in">
+  <p class="about-main-tag">About Us</p>
 
-    <p class="eyebrow" id="aboutTag">Our Journey</p>
+  <div class="about-slider-box">
 
-    <h4 id="aboutTitle">
-      Luxury Begins With Emotion
-    </h4>
+    <div class="about-slider-text">
 
-    <p id="aboutDesc">
-      Aura Lux was born from a passion for timeless fragrances crafted to leave unforgettable impressions.
-    </p>
+      <p id="aboutTag">Our Journey</p>
 
-    <div class="about-dots"></div>
+      <h2 id="aboutTitle">
+        Luxury Begins With Emotion
+      </h2>
+
+      <p id="aboutDesc">
+        Aura Lux was born from a passion for timeless fragrances crafted to leave unforgettable impressions.
+      </p>
+
+    </div>
+
+    <div class="about-slider-image">
+      <img id="aboutImage" src="assets/here1.jpeg" alt="">
+    </div>
 
   </div>
 
-  <div class="about-img fade-in">
-    <img id="aboutImage" src="assets/here1.jpeg" alt="" loading="lazy">
-  </div>
+</section>
 
-</div>
+<script>
+
+const aboutSlides = [
+
+{
+  image:"assets/here1.jpeg",
+  tag:"Our Journey",
+  title:"Luxury Begins With Emotion",
+  desc:"Aura Lux was born from a passion for timeless fragrances crafted to leave unforgettable impressions."
+},
+
+{
+  image:"assets/here2.jpeg",
+  tag:"Craftsmanship",
+  title:"Every Bottle Tells A Story",
+  desc:"Every fragrance is carefully selected and blended to create elegance, confidence, and unforgettable memories."
+},
+
+{
+  image:"assets/here3.jpeg",
+  tag:"Premium Experience",
+  title:"Inspired By Rare Essences",
+  desc:"From oud to amber and floral notes, Aura Lux brings luxury perfume experiences to Kerala."
+}
+
+];
+
+let currentAbout = 0;
+
+function changeAboutSlide(){
+
+  currentAbout++;
+
+  if(currentAbout >= aboutSlides.length){
+    currentAbout = 0;
+  }
+
+  document.getElementById("aboutImage").src = aboutSlides[currentAbout].image;
+  document.getElementById("aboutTitle").textContent = aboutSlides[currentAbout].title;
+  document.getElementById("aboutDesc").textContent = aboutSlides[currentAbout].desc;
+  document.getElementById("aboutTag").textContent = aboutSlides[currentAbout].tag;
+
+}
+
+setInterval(changeAboutSlide, 4000);
+
+</script>
+
+</body>
+</html>
+
+
+
+
 
 <footer>
   <div class="foot-grid">
@@ -388,73 +498,3 @@
     }, 50);
   }
 </script>
-
-<div class="wishlist-sidebar" id="wlSidebar">
-  <div class="wishlist-header">
-    <h3>♡ Saved <span id="wlTitle">0 items</span></h3>
-    <button class="wishlist-close" id="wlClose">✕</button>
-  </div>
-  <div class="wishlist-items" id="wlItems"></div>
-  <div class="wishlist-empty" id="wlEmpty">
-    <div class="wishlist-empty-icon">♡</div>
-    <p>Tap the heart on any perfume to save it here</p>
-  </div>
-  <div class="wishlist-footer" id="wlFooter" style="display:none">
-    <p>Send your wishlist to us on WhatsApp</p>
-    <button class="wishlist-wa-btn" id="wlSendWA">Send Wishlist on WhatsApp ↗</button>
-  </div>
-</div>
-<script>
-
-const aboutSlides = [
-
-{
-  image:"assets/here1.jpeg",
-  tag:"Our Journey",
-  title:"Luxury Begins With Emotion",
-  desc:"Aura Lux was born from a passion for timeless fragrances crafted to leave unforgettable impressions."
-},
-
-{
-  image:"assets/here2.jpeg",
-  tag:"Craftsmanship",
-  title:"Every Bottle Tells A Story",
-  desc:"Every fragrance is carefully selected and blended to create elegance, confidence, and unforgettable memories."
-},
-
-{
-  image:"assets/here3.jpeg",
-  tag:"Premium Experience",
-  title:"Inspired By Rare Essences",
-  desc:"From oud to amber and floral notes, Aura Lux brings luxury perfume experiences to Kerala."
-}
-
-];
-
-let currentAbout = 0;
-
-const aboutImage = document.getElementById("aboutImage");
-const aboutTitle = document.getElementById("aboutTitle");
-const aboutDesc = document.getElementById("aboutDesc");
-const aboutTag = document.getElementById("aboutTag");
-
-function changeAboutSlide(){
-
-  currentAbout++;
-
-  if(currentAbout >= aboutSlides.length){
-    currentAbout = 0;
-  }
-
-  aboutImage.src = aboutSlides[currentAbout].image;
-  aboutTitle.textContent = aboutSlides[currentAbout].title;
-  aboutDesc.textContent = aboutSlides[currentAbout].desc;
-  aboutTag.textContent = aboutSlides[currentAbout].tag;
-}
-
-setInterval(changeAboutSlide, 4000);
-
-</script>
-</body>
-</html>
-

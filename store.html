@@ -103,5 +103,17 @@
 </div>
 
 <!-- Product rendering is handled by app-new.js -->
+
+<div class="lux-cursor-glow"></div>
+
+<script>
+  const glow = document.querySelector('.lux-cursor-glow');
+
+  document.addEventListener('mousemove', (e) => {
+    if (!glow) return;
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+</script>
 </body>
 </html>

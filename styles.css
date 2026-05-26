@@ -362,6 +362,41 @@ main { width: 100%; padding-top: 60px; }
   .hero-split-title { font-size: 2.2rem; }
   .hero-branch { width: 120px; }
 }
+.lux-divider{
+  width:100%;
+  padding:4rem 0 2rem;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.lux-divider span{
+  width:72%;
+  height:1px;
+  background:linear-gradient(
+    to right,
+    transparent,
+    rgba(184,138,53,.25),
+    #b88a35,
+    rgba(184,138,53,.25),
+    transparent
+  );
+
+  position:relative;
+}
+
+.lux-divider span::before{
+  content:"✦";
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-55%);
+  font-size:.9rem;
+  color:#b88a35;
+  background:#f5efe6;
+  padding:0 1rem;
+  letter-spacing:.2em;
+}
 
 
 /* ── Sections ── */
@@ -603,210 +638,6 @@ main { width: 100%; padding-top: 60px; }
 .why-icon { font-size: 2.5rem; margin-bottom: 1rem; }
 .why-card h4 { font-size: 1.2rem; margin-bottom: .75rem; background: var(--gradient-gold); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .why-card p { font-size: .85rem; color: var(--muted-fg); line-height: 1.7; }
-
-/* ───────────────── ABOUT SECTION ───────────────── */
-
-.about {
-  padding: 7rem 2.5rem;
-  background: var(--gradient-card);
-  scroll-margin-top: 5rem;
-}
-
-.about-inner {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-.about h3 {
-  font-size: 3rem;
-  margin-bottom: 3rem;
-  text-align: center;
-  color: var(--fg);
-  letter-spacing: .02em;
-}
-
-/* Grid Layout */
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: stretch;
-  margin-block: 2.5rem;
-}
-
-/* Text Card */
-.about-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1.2rem;
-
-  padding: 3rem;
-
-  background: linear-gradient(
-    145deg,
-    #fdf9f1,
-    #f5ead8
-  );
-
-  border-radius: 1.5rem;
-  border: 1px solid rgba(212,166,79,.15);
-
-  box-shadow:
-    0 20px 50px rgba(60,40,20,.08),
-    inset 0 1px 0 rgba(255,255,255,.5);
-
-  position: relative;
-  overflow: hidden;
-}
-
-/* Luxury Quote Symbol */
-.about-text::before {
-  content: '"';
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 10rem;
-  color: var(--gold1);
-  opacity: .08;
-  position: absolute;
-  top: -2rem;
-  left: 1.2rem;
-  line-height: 1;
-  pointer-events: none;
-}
-
-/* Small Top Label */
-.about-text .eyebrow {
-  margin-bottom: .3rem;
-}
-
-/* Heading */
-.about-text h4 {
-  font-size: 2rem;
-  font-weight: 400;
-  line-height: 1.2;
-  color: var(--fg);
-  letter-spacing: .01em;
-  position: relative;
-  z-index: 2;
-}
-
-/* Paragraph */
-.about-text p {
-  color: var(--muted-fg);
-  line-height: 1.9;
-  font-size: .95rem;
-  position: relative;
-  z-index: 2;
-  font-family: 'Inter', sans-serif;
-}
-
-/* Image Container */
-.about-img {
-  position: relative;
-  min-height: 520px;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  border: 1px solid rgba(212,166,79,.18);
-
-  background:
-    linear-gradient(var(--card),var(--card)) padding-box,
-    var(--gradient-gold) border-box;
-
-  box-shadow:
-    0 25px 60px rgba(60,40,20,.15);
-
-  transition:
-    transform .5s ease,
-    box-shadow .5s ease;
-}
-
-/* Hover Effect */
-.about-img:hover {
-  transform: translateY(-4px);
-
-  box-shadow:
-    0 35px 80px rgba(60,40,20,.22);
-}
-
-/* Image */
-.about-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  inset: 0;
-  transition: transform 1s ease;
-}
-
-.about-img:hover img {
-  transform: scale(1.03);
-}
-
-/* Slider Dots */
-.about-dots {
-  display: flex;
-  gap: .6rem;
-  padding-top: 1.2rem;
-}
-
-.about-dots button {
-  height: 4px;
-  width: 10px;
-  border-radius: 9999px;
-  background: var(--muted);
-  border: none;
-  cursor: pointer;
-  transition: all .35s ease;
-}
-
-.about-dots button.active {
-  width: 36px;
-  background: var(--gradient-gold);
-}
-
-/* ───────────────── MOBILE ───────────────── */
-
-@media (max-width: 768px) {
-
-  .about {
-    padding: 4rem 1.25rem;
-  }
-
-  .about h3 {
-    font-size: 2.2rem;
-    margin-bottom: 2rem;
-  }
-
-  .about-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-block: 2rem;
-  }
-
-  .about-text {
-    padding: 2rem 1.5rem;
-    border-radius: 1.25rem;
-  }
-
-  .about-text h4 {
-    font-size: 1.5rem;
-  }
-
-  .about-text p {
-    font-size: .82rem;
-    line-height: 1.8;
-  }
-
-  .about-img {
-    min-height: 340px;
-    border-radius: 1.25rem;
-  }
-
-  .about-text::before {
-    font-size: 7rem;
-    top: -1rem;
-  }
-}
 
 /* ── Wishlist ── */
 .wishlist-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 190; }
@@ -1056,7 +887,7 @@ footer * { color: #9a8878; }
 .card .img-wrap img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important;
+  object-fit: contain !important;
   object-position: center !important;
   display: block !important;
 }
@@ -1143,3 +974,603 @@ body.store-page {
   text-transform: uppercase;
 }
 
+.card {
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+
+.card .img-wrap {
+  transition: box-shadow .35s ease, transform .35s ease;
+}
+
+.card:hover .img-wrap {
+  box-shadow: 0 22px 55px rgba(120, 80, 30, .18);
+}
+.card {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: cardReveal .6s ease forwards;
+}
+
+@keyframes cardReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card:nth-child(2) { animation-delay: .05s; }
+.card:nth-child(3) { animation-delay: .1s; }
+.card:nth-child(4) { animation-delay: .15s; }
+
+.lux-cursor-glow {
+  position: fixed;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(circle, rgba(202,162,74,.16), transparent 65%);
+  transform: translate(-50%, -50%);
+  transition: opacity .2s ease;
+}
+
+.nav,
+.filters,
+.card,
+.fab,
+footer {
+  position: relative;
+  z-index: 2;
+}
+/* Strong interactive store effects */
+
+.card {
+  transition: transform .35s ease, box-shadow .35s ease, filter .35s ease !important;
+}
+
+.card:hover {
+  transform: translateY(-14px) scale(1.025) !important;
+  box-shadow: 0 30px 80px rgba(80, 45, 10, .28) !important;
+  filter: brightness(1.03);
+}
+
+.card .img-wrap img {
+  transition: transform .45s ease, filter .45s ease !important;
+}
+
+.card:hover .img-wrap img {
+  transform: scale(1.08) translateY(-8px) !important;
+  filter: drop-shadow(0 22px 22px rgba(0,0,0,.22)) !important;
+}
+
+.btn-buy {
+  transition: transform .25s ease, box-shadow .25s ease !important;
+}
+
+.btn-buy:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 14px 30px rgba(138,104,38,.35) !important;
+}
+
+/* ABOUT SLIDER SECTION */
+
+.about-slider-section{
+  max-width:1500px;
+  margin:7rem auto;
+  padding:0 2rem;
+}
+
+.about-main-tag{
+  text-align:center;
+  color:#b88a35;
+  letter-spacing:.45em;
+  text-transform:uppercase;
+  margin-bottom:3rem;
+  font-size:22px;
+  font-weight:600;
+}
+
+.about-slider-box{
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  background:#fffaf3;
+  border:1px solid #dcc9a8;
+  border-radius:30px;
+  overflow:hidden;
+}
+
+.about-slider-text{
+  padding:5rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.about-slider-text p:first-child{
+  color:#b88a35;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  font-size:.75rem;
+}
+
+.about-slider-text h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:4rem;
+  line-height:1.05;
+  margin:1rem 0;
+  color:#2c2218;
+}
+
+.about-slider-text p:last-child{
+  color:#7a6a55;
+  line-height:1.9;
+  font-size:1rem;
+}
+
+.about-slider-image img{
+  width:100%;
+  height:700px;
+  object-fit:cover;
+  display:block;
+}
+
+@media(max-width:900px){
+
+  .about-slider-box{
+    grid-template-columns:1fr;
+  }
+
+  .about-slider-text{
+    padding:2rem;
+  }
+
+  .about-slider-text h2{
+    font-size:2.5rem;
+  }
+
+  .about-slider-image img{
+    height:420px;
+  }
+
+}
+
+.luxury-info-grid {
+  max-width: 1350px;
+  margin: 2rem auto;
+  padding: 2rem 2rem;
+  background: transparent;
+}
+
+.luxury-info-main {
+  max-width: 760px;
+  margin: 0 auto 5rem;
+  text-align: center;
+  background: transparent;
+  padding: 0;
+}
+
+.luxury-info-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8rem;
+}
+
+.luxury-info-card {
+  background: transparent;
+  padding: 0;
+}
+
+.luxury-info-grid span {
+  display: block;
+  color: #b88a35;
+  letter-spacing: .3em;
+  font-size: .8rem;
+  margin-bottom: 1rem;
+}
+
+.luxury-info-grid h3,
+.luxury-info-grid h4 {
+  font-size: 2.6rem;
+  line-height: 1.1;
+  color: #2c2218;
+  margin-bottom: 1.2rem;
+}
+
+.luxury-info-grid p {
+  color: #7a6a55;
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+@media(max-width: 768px) {
+  .luxury-info-row {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .luxury-info-grid h3,
+  .luxury-info-grid h4 {
+    font-size: 2rem;
+  }
+}
+
+.fragrance-editorial {
+  max-width: 1300px;
+  margin: 2rem auto;
+  padding: 2rem 2rem;
+  background: #f7efe5;
+}
+
+.fragrance-editorial .editorial-small {
+  text-align: center;
+  color: #b88a35;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  font-size: .75rem;
+}
+
+.fragrance-editorial h2 {
+  text-align: center;
+  font-size: 4rem;
+  line-height: 1;
+  margin: .8rem 0 4rem;
+}
+
+.fragrance-layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr .9fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.fragrance-img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+}
+
+.img-one {
+  grid-column: 1 / 2;
+  grid-row: 2;
+}
+
+.img-two {
+  grid-column: 3 / 4;
+  grid-row: 1 / 3;
+}
+
+.fragrance-copy {
+  max-width: 320px;
+}
+
+.fragrance-copy h4 {
+  font-size: 1.5rem;
+  margin-bottom: .7rem;
+}
+
+.fragrance-copy p {
+  color: #7a6a55;
+  line-height: 1.8;
+}
+
+.top-copy {
+  grid-column: 1 / 2;
+  grid-row: 1;
+}
+
+.middle-copy {
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+}
+
+.bottom-copy {
+  grid-column: 2 / 3;
+  grid-row: 3;
+}
+
+@media(max-width: 900px) {
+  .fragrance-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .img-one,
+  .img-two,
+  .top-copy,
+  .middle-copy,
+  .bottom-copy {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .fragrance-editorial h2 {
+    font-size: 2.6rem;
+  }
+}
+.fragrance-editorial{
+  position:relative;
+  overflow:hidden;
+}
+
+/* giant faded background text */
+.fragrance-editorial::before{
+  content:"AURA LUX";
+  position:absolute;
+  top:120px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:10rem;
+  font-weight:700;
+  letter-spacing:.25em;
+  color:rgba(184,138,53,0.04);
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+/* luxury gold line */
+.fragrance-editorial h2::after{
+  content:"";
+  display:block;
+  width:120px;
+  height:1px;
+  background:#b88a35;
+  margin:1.5rem auto 0;
+  opacity:.5;
+}
+
+/* image styling */
+.fragrance-img{
+  border-radius:18px;
+  box-shadow:
+  0 20px 50px rgba(0,0,0,.08);
+  transition:transform .5s ease;
+}
+
+.fragrance-img:hover{
+  transform:translateY(-10px);
+}
+
+/* decorative numbers */
+.fragrance-copy span{
+  font-size:1rem;
+  font-weight:600;
+  color:#b88a35;
+  letter-spacing:.35em;
+  margin-bottom:1.5rem;
+}
+
+/* luxury heading */
+.fragrance-copy h4{
+  font-size:2rem;
+  line-height:1.1;
+  margin-bottom:1rem;
+}
+
+/* better paragraph */
+.fragrance-copy p{
+  font-size:1.02rem;
+  line-height:2;
+  color:#6e5f4d;
+}
+
+/* decorative divider */
+.middle-copy{
+  position:relative;
+}
+
+.middle-copy::before{
+  content:"";
+  position:absolute;
+  left:-60px;
+  top:20px;
+  width:1px;
+  height:180px;
+  background:linear-gradient(to bottom,
+  transparent,
+  #b88a35,
+  transparent);
+}
+
+/* subtle floating glow */
+.img-two{
+  position:relative;
+}
+
+.img-two::after{
+  content:"";
+  position:absolute;
+  inset:-20px;
+  background:radial-gradient(rgba(184,138,53,.12), transparent 70%);
+  z-index:-1;
+}
+
+.card h4 {
+  font-size: .95rem !important;
+  line-height: 1.25 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.card .img-wrap {
+  aspect-ratio: 1 / 1 !important;
+}
+.top-copy {
+  grid-column: 1 / 2 !important;
+  grid-row: 1 !important;
+  align-self: end !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.img-one {
+  grid-column: 1 / 2 !important;
+  grid-row: 2 / 4 !important;
+}
+
+.middle-copy {
+  grid-column: 2 / 3 !important;
+  grid-row: 2 !important;
+  align-self: center !important;
+}
+
+.img-two {
+  grid-column: 3 / 4 !important;
+  grid-row: 1 / 3 !important;
+}
+
+.bottom-copy {
+  grid-column: 3 / 4 !important;
+  grid-row: 3 !important;
+  align-self: start !important;
+  margin-top: 1.5rem !important;
+}
+
+.memory-text-section{
+  padding:70px 7% 40px;
+  margin-top:90px;
+  overflow:hidden;
+}
+
+.memory-text-container{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.memory-text-container h2{
+  font-family:"Cormorant Garamond", serif;
+  font-size:82px;
+  line-height:1.05;
+  font-weight:300;
+  color:#111;
+  letter-spacing:-3px;
+  max-width:1600px;
+}
+
+.memory-text-container .line{
+  display:block;
+  white-space:nowrap;
+}
+
+/* horizontal image */
+.memory-pill{
+  display:inline-flex;
+  width:210px;
+  height:85px;
+  border-radius:60px;
+  overflow:hidden;
+  vertical-align:middle;
+  margin:0 14px;
+}
+
+/* vertical image */
+.memory-pill.vertical{
+  width:110px;
+  height:150px;
+  border-radius:60px;
+}
+
+.memory-pill img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.perfume-icon{
+  font-size:55px;
+  vertical-align:middle;
+  margin-left:10px;
+}
+/* mobile */
+@media(max-width:768px){
+
+  .memory-text-container h2{
+    font-size:15vw;
+    letter-spacing:-2px;
+  }
+
+  .memory-pill{
+    width:120px;
+    height:50px;
+  }
+
+  .memory-pill.vertical{
+    width:70px;
+    height:100px;
+  }
+}
+
+.memory-text-container h2{
+  font-size:82px;
+  line-height:1.25;
+  letter-spacing:-3px;
+}
+
+.memory-text-container .line{
+  display:block;
+  white-space:nowrap;
+}
+
+/* ===== MEMORY TEXT SECTION FIX ===== */
+
+.memory-text-section{
+  padding:70px 7% 40px;
+  margin-top:40px;
+  overflow:hidden;
+}
+
+.memory-text-container{
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+
+.memory-text-container h2{
+  font-family:"Cormorant Garamond", serif !important;
+  font-size:82px !important;
+  line-height:1.1 !important;
+  font-weight:300 !important;
+  color:#111 !important;
+  letter-spacing:-3px !important;
+}
+
+.memory-text-container .line{
+  display:block;
+  white-space:nowrap;
+}
+
+.memory-pill{
+  display:inline-flex !important;
+  width:210px !important;
+  height:85px !important;
+  border-radius:60px !important;
+  overflow:hidden !important;
+  vertical-align:middle;
+  margin:0 14px;
+}
+
+.memory-pill.vertical{
+  width:110px !important;
+  height:150px !important;
+  border-radius:60px !important;
+}
+
+.memory-pill img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  display:block;
+}
+
+.perfume-icon{
+  font-size:55px;
+  vertical-align:middle;
+  margin-left:10px;
+}

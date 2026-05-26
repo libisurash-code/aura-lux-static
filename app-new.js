@@ -11,7 +11,8 @@ const GOOGLE_SHEET_PERFUMES_URL = window.GOOGLE_SHEET_PERFUMES_URL || `https://d
 const GOOGLE_SHEET_COMBO_URL = window.GOOGLE_SHEET_COMBO_URL || (window.GOOGLE_SHEET_COMBO_URL || "");
 
 // Small inline SVG data-URL used as a safe placeholder when an image file is missing.
-const PLACEHOLDER_IMAGE = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#f4f0ea"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9a8878" font-family="Arial,Helvetica,sans-serif" font-size="28">No Image</text></svg>');
+const PLACEHOLDER_IMAGE =
+'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
 const buyOnWhatsApp = (name) => {
   const msg = encodeURIComponent(`Hi, I want to buy ${name} from Aura Lux.`);
@@ -755,7 +756,12 @@ async function hydrateImages() {
         }
       }
       if (chosen) {
-        img.src = chosen;
+        img.onload = () => {
+  const wrap = img.closest('.img-wrap');
+  if (wrap) wrap.classList.add('loaded');
+};
+
+img.src = chosen;
         console.debug('[Images] loaded', chosen, 'for', img.alt || img.dataset.name || 'unknown');
       } else {
         img.src = PLACEHOLDER_IMAGE;
