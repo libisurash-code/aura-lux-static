@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aura Lux Product | Luxury Perfumes</title>
+<meta name="description" content="View Aura Lux perfume details, choose size and order on WhatsApp.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="assets/ourcollection.png" type="image/png">
+</head>
+<body class="product-page">
+<button id="scrollTopBtn">↑</button>
+
+<header class="nav glass">
+  <div class="nav-inner">
+    <a class="brand-container" href="./">
+      <span class="brand-aura">AURA</span>
+      <span class="brand-lux">LUX</span>
+    </a>
+
+    <div style="display:flex;align-items:center;gap:.75rem;">
+      <button id="wlFab" style="display:flex;align-items:center;gap:.35rem;background:var(--gradient-gold);border:none;border-radius:9999px;padding:.4rem .85rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:#fffaf0;cursor:pointer;font-family:'Inter',sans-serif;">
+        ♡ <span id="wlCount">0</span>
+      </button>
+      <button class="menu-toggle" aria-label="Toggle Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <nav class="nav-links">
+      <a href="./">Home</a>
+      <a href="store.html">Store</a>
+      <a href="special.html">Special</a>
+      <button id="wlFabDesktop" onclick="document.getElementById('wlFab').click()" style="display:flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#d4a64f,#8a6826);border:none;border-radius:9999px;padding:.5rem 1.25rem;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:#fffaf0;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;">
+        ♡ Saved <span id="wlCountDesktop" style="background:#fff;color:#8a6826;border-radius:9999px;width:18px;height:18px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">0</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="product-main">
+  <div id="productDetailRoot">
+    <section class="product-detail-skeleton" aria-label="Loading product">
+      <div class="product-skeleton-image skeleton-shimmer"></div>
+      <div class="product-skeleton-info">
+        <div class="product-skeleton-kicker skeleton-shimmer"></div>
+        <div class="product-skeleton-title skeleton-shimmer"></div>
+        <div class="product-skeleton-price skeleton-shimmer"></div>
+        <div class="product-skeleton-sizes">
+          <span class="skeleton-shimmer"></span>
+          <span class="skeleton-shimmer"></span>
+          <span class="skeleton-shimmer"></span>
+          <span class="skeleton-shimmer"></span>
+        </div>
+        <div class="product-skeleton-line long skeleton-shimmer"></div>
+        <div class="product-skeleton-line skeleton-shimmer"></div>
+        <div class="product-skeleton-line short skeleton-shimmer"></div>
+        <div class="product-skeleton-button skeleton-shimmer"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <p class="foot-bottom">© <span id="year"></span> Aura Lux · Luxury Perfumes · All rights reserved.</p>
+</footer>
+
+<div class="wishlist-overlay" id="wlOverlay"></div>
+<div class="wishlist-sidebar" id="wlSidebar">
+  <div class="wishlist-header">
+    <h3>♡ Saved <span id="wlTitle">0 items</span></h3>
+    <button class="wishlist-close" id="wlClose">✕</button>
+  </div>
+  <div class="wishlist-items" id="wlItems"></div>
+  <div class="wishlist-empty" id="wlEmpty">
+    <div class="wishlist-empty-icon">♡</div>
+    <p>Tap the heart on any perfume to save it here</p>
+  </div>
+  <div class="wishlist-footer" id="wlFooter" style="display:none">
+    <p>Send your wishlist to us on WhatsApp</p>
+    <button class="wishlist-wa-btn" id="wlSendWA">Send Wishlist on WhatsApp ↗</button>
+  </div>
+</div>
+
+<script src="app-new.js"></script>
+<script>
+  window.onAuraReady(() => {
+    (AURA.fetchPerfumesFromSheet || (() => Promise.resolve()))()
+      .catch(() => {})
+      .then(() => AURA.initProductPage());
+  });
+</script>
+</body>
+</html>
