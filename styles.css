@@ -1574,3 +1574,117 @@ footer {
   vertical-align:middle;
   margin-left:10px;
 }
+/* ===== TRUE FULL SCREEN MOBILE LAYOUT ===== */
+
+@media (max-width:768px){
+
+  html,
+  body{
+    width:100%;
+    overflow-x:hidden;
+  }
+
+  main,
+  section,
+  div{
+    max-width:100% !important;
+  }
+
+  /* remove boxed layout */
+  .luxury-showcase,
+  .fragrance-editorial,
+  .luxury-info-grid,
+  .about-slider-section,
+  .featured-strip,
+  .memory-text-section,
+  .editorial-banner,
+  .hero-split,
+  .section{
+    width:100vw !important;
+    max-width:100vw !important;
+    margin-left:calc(50% - 50vw) !important;
+    margin-right:calc(50% - 50vw) !important;
+    border-radius:0 !important;
+  }
+
+  /* remove side gaps */
+  .fragrance-editorial,
+  .luxury-info-grid,
+  .about-slider-section,
+  .featured-strip,
+  .memory-text-section,
+  .section{
+    padding-left:16px !important;
+    padding-right:16px !important;
+  }
+
+  /* images full width */
+  img{
+    max-width:100%;
+  }
+
+  .hero-split-img,
+  .hero-slider,
+  .hero-slide{
+    width:100vw !important;
+  }
+
+}
+
+/* ===== PHONE FIX: PRODUCT STANDARD QUALITIES ===== */
+@media (max-width:768px){
+
+  .fragrance-editorial{
+    padding:45px 20px !important;
+    overflow:hidden !important;
+  }
+
+  .fragrance-editorial h2{
+    font-size:38px !important;
+    line-height:1.05 !important;
+    margin-bottom:35px !important;
+  }
+
+  .fragrance-layout{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:28px !important;
+  }
+
+  .top-copy,
+  .middle-copy,
+  .bottom-copy{
+    max-width:100% !important;
+    width:100% !important;
+    text-align:left !important;
+    margin:0 !important;
+  }
+
+  .fragrance-copy h4{
+    font-size:30px !important;
+    line-height:1.05 !important;
+  }
+
+  .fragrance-copy p{
+    font-size:15px !important;
+    line-height:1.7 !important;
+  }
+
+  .fragrance-img{
+    width:100% !important;
+    height:auto !important;
+    max-height:none !important;
+    object-fit:cover !important;
+    border-radius:22px !important;
+  }
+
+  .img-one,
+  .img-two{
+    width:100% !important;
+    height:auto !important;
+  }
+
+  .middle-copy::before{
+    display:none !important;
+  }
+}
