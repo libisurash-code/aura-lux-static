@@ -572,22 +572,42 @@ function initProductPage() {
       : [bottleImage];
   const sizes = ["20ml", "30ml", "50ml", "100ml"];
   const firstSize = sizes.find(size => product.prices && product.prices[size]) || "20ml";
+  const availableSizes = sizes.filter(size => product.prices && product.prices[size]);
+  const titleSizes = (availableSizes.length ? availableSizes : sizes).map(size => size.toUpperCase()).join(" / ");
   const isLiked = getWishlist().some(w => w.name === product.name);
-  const description = product.description || "A refined Aura Lux perfume crafted for a memorable everyday luxury experience.";
+  const description = product.description || "A refined Aura Lux perfume crafted for long-lasting freshness, elegance, and everyday luxury.";
   const notes = product.notes || "";
+  const ecommerceTitle = `${product.name} Luxury Long Lasting Eau De Parfum - ${titleSizes} (For Men & Women)`;
   root.innerHTML = `
     <section class="product-detail">
-      <div class="product-detail-image">
-        <img src="${PLACEHOLDER_IMAGE}"
-          data-candidates='${esc(JSON.stringify(bottleCandidates))}'
-          alt="${esc(product.name)}"
-          onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
+      <div class="product-detail-gallery">
+        <div class="product-detail-image">
+          <img src="${PLACEHOLDER_IMAGE}"
+            data-candidates='${esc(JSON.stringify(bottleCandidates))}'
+            alt="${esc(product.name)}"
+            onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
+        </div>
       </div>
       <div class="product-detail-info">
-        <a class="product-back-link" href="store.html">Back to Store</a>
-        <p class="product-detail-category">${esc(product.category || "Aura Lux Perfume")}</p>
-        <h1>${esc(product.name)}</h1>
-        <p class="product-detail-price" id="productDetailPrice">₹${getProductPrice(product, firstSize)}</p>
+        <nav class="product-breadcrumb" aria-label="Breadcrumb">
+          <a href="./">Home</a>
+          <span>/</span>
+          <a href="store.html">Store</a>
+          <span>/</span>
+          <a href="store.html?cat=${encodeURIComponent(product.category || "")}">${esc(product.category || "Perfume")}</a>
+          <span>/</span>
+          <span>${esc(product.name)}</span>
+        </nav>
+        <p class="product-brand">Aura Lux</p>
+        <h1>${esc(ecommerceTitle)}</h1>
+        <div class="product-rating-row">
+          <span class="product-rating-badge">4.5 <span>★</span></span>
+          <span>Premium Perfume</span>
+        </div>
+        <div class="product-price-block">
+          <p class="product-price-label">Special price</p>
+          <p class="product-detail-price" id="productDetailPrice">&#8377;${getProductPrice(product, firstSize)}</p>
+        </div>
         <div class="product-option-group">
           <p>Size</p>
           <div class="product-size-options">
@@ -598,10 +618,6 @@ function initProductPage() {
                 ${product.prices && product.prices[size] ? "" : "disabled"}>${size.toUpperCase()}</button>
             `).join("")}
           </div>
-        </div>
-        <div class="product-description">
-          <p>${esc(description)}</p>
-          ${notes ? `<div><span>Fragrance Notes</span><p>${esc(notes)}</p></div>` : ""}
         </div>
         <div class="product-quantity">
           <p>Quantity</p>
@@ -615,6 +631,27 @@ function initProductPage() {
           <button class="product-wa-btn" id="productWhatsApp">Buy on WhatsApp</button>
           <button class="product-wishlist-btn ${isLiked ? "liked" : ""}" id="productWishlist">${isLiked ? "Saved" : "Add to Wishlist"}</button>
         </div>
+        <div class="product-description">
+          <h2>Product Description</h2>
+          <p>${esc(description)}</p>
+        </div>
+        <div class="product-details-box">
+          <h2>Product Details</h2>
+          <dl>
+            <div><dt>Brand</dt><dd>Aura Lux</dd></div>
+            <div><dt>Fragrance Type</dt><dd>Eau De Parfum</dd></div>
+            <div><dt>Category</dt><dd>${esc(product.category || "Perfume")}</dd></div>
+            <div><dt>Size</dt><dd id="productSelectedSize">${firstSize.toUpperCase()}</dd></div>
+            <div><dt>Ideal For</dt><dd>Men &amp; Women</dd></div>
+            <div><dt>Country/Region</dt><dd>Kerala, India</dd></div>
+          </dl>
+        </div>
+        ${notes ? `
+          <div class="product-notes-box">
+            <h2>Fragrance Notes</h2>
+            <p>${esc(notes)}</p>
+          </div>
+        ` : ""}
       </div>
     </section>
     <div class="product-sticky-buy">
@@ -624,6 +661,7 @@ function initProductPage() {
   let selectedSize = firstSize;
   let selectedPrice = getProductPrice(product, selectedSize);
   const priceEl = document.getElementById("productDetailPrice");
+  const selectedSizeEl = document.getElementById("productSelectedSize");
   const qtyInput = document.getElementById("productQty");
   const setQty = value => {
     const next = Math.max(1, parseInt(value, 10) || 1);
@@ -636,7 +674,8 @@ function initProductPage() {
       btn.classList.add("active");
       selectedSize = btn.dataset.size;
       selectedPrice = Number(btn.dataset.price || 0);
-      if (priceEl) priceEl.textContent = "₹" + selectedPrice;
+      if (priceEl) priceEl.textContent = "\u20b9" + selectedPrice;
+      if (selectedSizeEl) selectedSizeEl.textContent = selectedSize.toUpperCase();
     });
   });
   document.getElementById("qtyMinus").addEventListener("click", () => setQty((parseInt(qtyInput.value, 10) || 1) - 1));
