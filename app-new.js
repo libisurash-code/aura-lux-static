@@ -601,7 +601,6 @@ function initProductPage() {
         <p class="product-brand">Aura Lux</p>
         <h1>${esc(ecommerceTitle)}</h1>
         <div class="product-rating-row">
-          <span class="product-rating-badge">4.5 <span>★</span></span>
           <span>Premium Perfume</span>
         </div>
         <div class="product-price-block">
