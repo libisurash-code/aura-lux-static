@@ -1,23 +1,29 @@
 // ============== AURA LUX — app-new.js (FIXED) ==============
+
 if (window.__AURA_LOADED) {
   console.warn("AURA already initialized — skipping duplicate load.");
 } 
 window.__AURA_LOADED = true;
+
 const WHATSAPP_NUMBER = window.WHATSAPP_NUMBER || "919539600019";
 // Default to the published CSV URL provided by the owner. Can be overridden via window.GOOGLE_SHEET_PERFUMES_URL
 const GOOGLE_SHEET_PERFUMES_URL = window.GOOGLE_SHEET_PERFUMES_URL || `https://docs.google.com/spreadsheets/d/e/2PACX-1vTvs4joWqG7VkzwPE5Y9xU8Rw5LW9sWe57bXIeWcBNrBXhh-VlkoFiXtsms9gJDK2rjFT6DNBQ8Txmq/pub?output=csv`;
 const GOOGLE_SHEET_COMBO_URL = window.GOOGLE_SHEET_COMBO_URL || (window.GOOGLE_SHEET_COMBO_URL || "");
+
 // Small inline SVG data-URL used as a safe placeholder when an image file is missing.
 const PLACEHOLDER_IMAGE =
 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+
 const buyOnWhatsApp = (name) => {
   const msg = encodeURIComponent(`Hi, I want to buy ${name} from Aura Lux.`);
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
 };
+
 const inquireOnWhatsApp = () => {
   const msg = encodeURIComponent("Hi, I'd like to know more about Aura Lux perfumes.");
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
 };
+
 // ===== UTILITIES =====
 const safeJSON = (value, fallback) => {
   try { return JSON.parse(value); } catch { return fallback; }
@@ -31,6 +37,7 @@ const safeLocalStorageSet = (key, value) => {
 const safeSessionStorageGet = (key) => {
   try { return sessionStorage.getItem(key); } catch { return null; }
 };
+
 const cachedFetchText = async (url, cacheKey, ttl = 60 * 60 * 1000) => {
   const now = Date.now();
   let cached = null;
@@ -52,6 +59,7 @@ const cachedFetchText = async (url, cacheKey, ttl = 60 * 60 * 1000) => {
     throw error;
   }
 };
+
 const parseCSVLine = (line) => {
   const result = [];
   const regex = /(?:^|,)(?:(?:"([^"]*(?:""[^"]*)*)")|([^",]*))/g;
@@ -62,6 +70,7 @@ const parseCSVLine = (line) => {
   }
   return result;
 };
+
 const parseCSV = (csv) => {
   const lines = csv.trim().split(/\r?\n/).filter(Boolean);
   if (!lines.length) return [];
@@ -75,16 +84,14 @@ const parseCSV = (csv) => {
     return row;
   });
 };
+
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const productUrl = id => `product.html?id=${encodeURIComponent(id)}`;
-const getProductPrice = (p, size = "20ml") => {
-  const prices = p && p.prices ? p.prices : {};
-  return prices[size] || prices["20ml"] || prices["30ml"] || prices["50ml"] || prices["100ml"] || 0;
-};
+
 // ===== DATA STATE =====
 let PERFUMES = [];
 let COMBOS = [];
 let CATEGORIES = [];
+
 // ===== IMAGE PATH RESOLVER =====
 const resolveImagePath = (filename, folder = "perfumes") => {
   if (!filename) return { candidates: [PLACEHOLDER_IMAGE], original: "" };
@@ -94,6 +101,7 @@ const resolveImagePath = (filename, folder = "perfumes") => {
   if (/^https?:\/\//i.test(clean)) return { candidates: [clean], original: clean };
   // Strip any leading ./ or / or images/ prefix supplied by sheet
   clean = clean.replace(/^\.?\/+/, "").replace(/^images\//i, "");
+
   const base = `images/${folder}/`;
   const candidates = [];
   const extMatch = clean.match(/(\.[a-z0-9]{2,5})$/i);
@@ -116,6 +124,7 @@ const resolveImagePath = (filename, folder = "perfumes") => {
   console.debug("[Images] resolveImagePath ->", { original: filename, folder, candidates });
   return { candidates, original: filename };
 };
+
 // ===== PERFUME PARSER =====
 const buildPerfumeFromSheet = (item, index) => {
   const id = String(item.id || `perf-${index}`).trim();
@@ -133,10 +142,9 @@ const buildPerfumeFromSheet = (item, index) => {
     "100ml": parsePrice(item["100ml"] || item["100 ml"])
   };
   if (!name) return null;
-  const description = String(item.description || item.desc || item.short_description || item.shortDescription || "").trim();
-  const notes = String(item.notes || item.fragrance_notes || item.fragranceNotes || item.note || "").trim();
-  return { id, name, category, bottleImage: image, background: `images/cat-others.jpg`, prices, description, notes };
+  return { id, name, category, bottleImage: image, background: `images/cat-others.jpg`, prices };
 };
+
 // ===== COMBO PARSER =====
 const buildComboFromSheet = (item, index) => {
   const id = String(item.id || `combo-${index}`).trim();
@@ -148,6 +156,7 @@ const buildComboFromSheet = (item, index) => {
   if (!name) return null;
   return { id, name, image, price: price || "0", size: size || "Combo", offer: offer || name };
 };
+
 // ===== FETCH =====
 const fetchPerfumesFromSheet = async () => {
   try {
@@ -168,6 +177,7 @@ const fetchPerfumesFromSheet = async () => {
     throw error;
   }
 };
+
 const fetchCombosFromSheet = async () => {
   const combosEl = typeof document !== 'undefined' ? document.getElementById('comboScroll') : null;
   if (combosEl) combosEl.innerHTML = '<div class="combo-loading" style="padding:1rem;text-align:center;">Loading combos…</div>';
@@ -237,6 +247,7 @@ const fetchCombosFromSheet = async () => {
     return COMBOS;
   }
 };
+
 // ===== WISHLIST HELPERS =====
 function getWishlist() {
   return safeLocalStorageGet("aura-wishlist", []);
@@ -244,6 +255,7 @@ function getWishlist() {
 function saveWishlist(list) {
   safeLocalStorageSet("aura-wishlist", list);
 }
+
 function updateWishlistCount() {
   const count = getWishlist().length;
   const wlCount        = document.getElementById("wlCount");
@@ -253,29 +265,24 @@ function updateWishlistCount() {
   if (wlCountDesktop) wlCountDesktop.textContent = count;
   if (wlTitle)        wlTitle.textContent        = `${count} item${count !== 1 ? "s" : ""}`;
 }
-const heartIconHTML = () => `
-  <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"></path>
-  </svg>`;
-function setHeartButtonState(btn, liked) {
-  btn.classList.toggle("liked", liked);
-  btn.setAttribute("aria-pressed", liked ? "true" : "false");
-  btn.setAttribute("aria-label", liked ? "Remove from wishlist" : "Save to wishlist");
-  btn.innerHTML = heartIconHTML();
-}
+
 function syncHeartButtons() {
   const list = getWishlist();
   document.querySelectorAll(".btn-heart").forEach(btn => {
     const liked = list.some(w => w.name === btn.dataset.name);
-    setHeartButtonState(btn, liked);
+    btn.classList.toggle("liked", liked);
+    btn.textContent = liked ? "♥" : "♡";
   });
 }
+
 function renderWishlistSidebar() {
   const itemsEl  = document.getElementById("wlItems");
   const emptyEl  = document.getElementById("wlEmpty");
   const footerEl = document.getElementById("wlFooter");
   if (!itemsEl) return;
+
   const list = getWishlist();
+
   if (list.length === 0) {
     itemsEl.innerHTML = "";
     if (emptyEl)  emptyEl.style.display  = "";
@@ -283,8 +290,10 @@ function renderWishlistSidebar() {
     updateWishlistCount();
     return;
   }
+
   if (emptyEl)  emptyEl.style.display  = "none";
   if (footerEl) footerEl.style.display = "";
+
   itemsEl.innerHTML = list.map((item, idx) => `
     <div class="wishlist-item" data-idx="${idx}">
       <img
@@ -309,6 +318,7 @@ function renderWishlistSidebar() {
   // Resolve wishlist images
   hydrateImages().catch(e => console.error('[Images] hydrateImages failed', e));
 }
+
 function openWishlist() {
   renderWishlistSidebar();
   const sidebar = document.getElementById("wlSidebar");
@@ -317,6 +327,7 @@ function openWishlist() {
   if (overlay) overlay.classList.add("show");
   document.body.style.overflow = "hidden";
 }
+
 function closeWishlist() {
   const sidebar = document.getElementById("wlSidebar");
   const overlay = document.getElementById("wlOverlay");
@@ -324,18 +335,22 @@ function closeWishlist() {
   if (overlay) overlay.classList.remove("show");
   document.body.style.overflow = "";
 }
+
 function initWishlist() {
   // Open
   ["wlFab", "wlFabDesktop"].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener("click", openWishlist);
   });
+
   // Close button
   const closeBtn = document.getElementById("wlClose");
   if (closeBtn) closeBtn.addEventListener("click", closeWishlist);
+
   // Overlay click
   const overlay = document.getElementById("wlOverlay");
   if (overlay) overlay.addEventListener("click", closeWishlist);
+
   // Sidebar delegated clicks (remove + buy)
   const sidebar = document.getElementById("wlSidebar");
   if (sidebar) {
@@ -364,6 +379,7 @@ function initWishlist() {
       }
     });
   }
+
   // Send full wishlist on WhatsApp
   const sendWA = document.getElementById("wlSendWA");
   if (sendWA) {
@@ -379,14 +395,21 @@ function initWishlist() {
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
     });
   }
+
   updateWishlistCount();
 }
-// ===== UI: PRODUCT CARD =====
+
 // ===== UI: PRODUCT CARD =====
 function productCardHTML(p) {
   const badge = p.badge ? `<span class="badge">${esc(p.badge)}</span>` : "";
   const isLiked = getWishlist().some(w => w.name === p.name);
-  const displayPrice = getProductPrice(p);
+
+  const prices = p.prices || { "20ml": 0, "30ml": 0, "50ml": 0, "100ml": 0 };
+  const price20ml = prices["20ml"] || 0;
+  const price30ml = prices["30ml"] || 0;
+  const price50ml = prices["50ml"] || 0;
+  const price100ml = prices["100ml"] || 0;
+
   const bottleImage = p.bottleImage || PLACEHOLDER_IMAGE;
   const bottleCandidates =
     bottleImage && bottleImage.candidates
@@ -394,30 +417,50 @@ function productCardHTML(p) {
       : Array.isArray(bottleImage)
       ? bottleImage
       : [bottleImage];
-  return `<div class="card product-card" data-product-id="${esc(p.id)}" data-product-name="${esc(p.name)}">
+
+  return `<div class="card" data-product-name="${esc(p.name)}">
     ${badge}
+
     <button class="btn-heart ${isLiked ? "liked" : ""}"
       data-name="${esc(p.name)}"
       data-image="${esc(bottleCandidates[0] || PLACEHOLDER_IMAGE)}"
-      data-price="${displayPrice}"
-      aria-label="${isLiked ? "Remove from wishlist" : "Save to wishlist"}"
-      aria-pressed="${isLiked ? "true" : "false"}">${heartIconHTML()}</button>
-    <a class="product-card-link" href="${productUrl(p.id)}" aria-label="View ${esc(p.name)}">
-      <div class="img-wrap">
-        <img src="${PLACEHOLDER_IMAGE}"
-          data-candidates='${esc(JSON.stringify(bottleCandidates))}'
-          alt="${esc(p.name)}"
-          loading="lazy"
-          onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
-      </div>
-      <div class="body">
+      data-price="${price20ml}"
+      aria-label="Save to wishlist">${isLiked ? "♥" : "♡"}</button>
+
+    <div class="img-wrap">
+      <img src="${PLACEHOLDER_IMAGE}"
+        data-candidates='${esc(JSON.stringify(bottleCandidates))}'
+        alt="${esc(p.name)}"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
+    </div>
+
+    <div class="body">
+      <div>
         <h4>${esc(p.name)}</h4>
         <p class="cat-label">${esc(p.category || "")}</p>
-        <p class="price">&#8377;${displayPrice}</p>
       </div>
-    </a>
+
+      <div class="size-selector" style="display:flex;gap:.4rem;margin-bottom:.75rem;flex-wrap:wrap">
+        <button class="size-btn active" data-size="20ml" data-price="${price20ml}" style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:linear-gradient(135deg,#d4a64f,#8a6826);color:#fff;border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">20ml</button>
+
+        <button class="size-btn" data-size="30ml" data-price="${price30ml}" style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:transparent;color:var(--muted-fg);border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">30ml</button>
+
+        <button class="size-btn" data-size="50ml" data-price="${price50ml}" style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:transparent;color:var(--muted-fg);border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">50ml</button>
+
+        <button class="size-btn" data-size="100ml" data-price="${price100ml}" style="flex:1;min-width:45px;padding:.4rem .5rem;border:1px solid var(--border);background:transparent;color:var(--muted-fg);border-radius:.5rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s">100ml</button>
+      </div>
+
+      <p class="price">₹${price20ml}</p>
+
+      <button class="btn-buy"
+        data-buy="${esc(p.name)}"
+        data-price="${price20ml}"
+        data-size="20ml">Buy Now</button>
+    </div>
   </div>`;
 }
+
 // ===== UI: COMBO CARD =====
 function comboCardHTML(c) {
   const comboImg = c.image || PLACEHOLDER_IMAGE;
@@ -434,10 +477,12 @@ function comboCardHTML(c) {
     </div>
   </div>`;
 }
+
 // ===== RENDER HOME =====
 function renderHome() {
   const sets1  = document.getElementById("setsScroll1");
   const combos = document.getElementById("comboScroll");
+
   if (sets1 && PERFUMES.length > 0) {
     sets1.innerHTML = PERFUMES.slice(0, 8).map(p => `<div>${productCardHTML(p)}</div>`).join("");
   }
@@ -447,6 +492,7 @@ function renderHome() {
   // After inserting HTML, attempt to resolve actual image URLs asynchronously
   hydrateImages().catch(e => console.error('[Images] hydrateImages failed', e));
 }
+
 // ===== STORE PAGE =====
 function initStorePage(opts) {
   const { source, pageSize = 12 } = opts;
@@ -457,12 +503,14 @@ function initStorePage(opts) {
   let maxPrice = "";
   let selectedSize = "20ml";
   let visible = pageSize;
+
   const grid     = document.getElementById("productGrid");
   const empty    = document.getElementById("emptyState");
   const loadWrap = document.getElementById("loadMoreWrap");
   const countEl  = document.getElementById("countLabel");
   const search   = document.getElementById("searchInput");
   const chipsWrap = document.getElementById("chips");
+
   ["All", ...CATEGORIES].forEach(c => {
     const b = document.createElement("button");
     b.className = "chip" + (c === cat ? " active" : "");
@@ -477,6 +525,7 @@ function initStorePage(opts) {
     });
     chipsWrap.appendChild(b);
   });
+
   const priceFilterWrap = document.createElement("div");
   priceFilterWrap.className = "price-filter";
   priceFilterWrap.innerHTML = `
@@ -492,9 +541,11 @@ function initStorePage(opts) {
       <option value="100ml">100ml</option>
     </select>`;
   chipsWrap.appendChild(priceFilterWrap);
+
   const minPriceInput = document.getElementById("minPrice");
   const maxPriceInput = document.getElementById("maxPrice");
   const sizeFilter    = document.getElementById("priceSizeFilter");
+
   [minPriceInput, maxPriceInput, sizeFilter].forEach(el => {
     el.addEventListener("input", () => {
       minPrice = minPriceInput.value;
@@ -504,7 +555,9 @@ function initStorePage(opts) {
       render();
     });
   });
+
   if (search) search.addEventListener("input", e => { query = e.target.value; visible = pageSize; render(); });
+
   function getFiltered() {
     return source.filter(p => {
       if (cat !== "All" && p.category !== cat) return false;
@@ -519,6 +572,7 @@ function initStorePage(opts) {
       return true;
     });
   }
+
   function render() {
     const f = getFiltered();
     if (f.length === 0) {
@@ -534,9 +588,11 @@ function initStorePage(opts) {
     // Resolve image URLs for newly rendered items
     hydrateImages().catch(e => console.error('[Images] hydrateImages failed', e));
   }
+
   document.getElementById("loadMoreBtn").addEventListener("click", () => {
     const f = getFiltered(); visible = Math.min(visible + pageSize, f.length); render();
   });
+
   const sentinel = document.getElementById("sentinel");
   if (sentinel) {
     new IntersectionObserver(entries => {
@@ -546,167 +602,10 @@ function initStorePage(opts) {
       }
     }, { rootMargin: "300px" }).observe(sentinel);
   }
+
   render();
 }
-// ===== PRODUCT DETAIL PAGE =====
-function initProductPage() {
-  const root = document.getElementById("productDetailRoot");
-  if (!root) return;
-  const params = new URLSearchParams(location.search);
-  const id = params.get("id");
-  const product = PERFUMES.find(p => String(p.id) === String(id));
-  if (!product) {
-    root.innerHTML = `
-      <section class="product-not-found">
-        <h1>Product not found</h1>
-        <a href="store.html">Back to Store</a>
-      </section>`;
-    return;
-  }
-  const bottleImage = product.bottleImage || PLACEHOLDER_IMAGE;
-  const bottleCandidates =
-    bottleImage && bottleImage.candidates
-      ? bottleImage.candidates
-      : Array.isArray(bottleImage)
-      ? bottleImage
-      : [bottleImage];
-  const sizes = ["20ml", "30ml", "50ml", "100ml"];
-  const firstSize = sizes.find(size => product.prices && product.prices[size]) || "20ml";
-  const availableSizes = sizes.filter(size => product.prices && product.prices[size]);
-  const titleSizes = (availableSizes.length ? availableSizes : sizes).map(size => size.toUpperCase()).join(" / ");
-  const isLiked = getWishlist().some(w => w.name === product.name);
-  const description = product.description || "A refined Aura Lux perfume crafted for long-lasting freshness, elegance, and everyday luxury.";
-  const notes = product.notes || "";
-  const ecommerceTitle = `${product.name} Luxury Long Lasting Eau De Parfum - ${titleSizes} (For Men & Women)`;
-  root.innerHTML = `
-    <section class="product-detail">
-      <div class="product-detail-gallery">
-        <div class="product-detail-image">
-          <img src="${PLACEHOLDER_IMAGE}"
-            data-candidates='${esc(JSON.stringify(bottleCandidates))}'
-            alt="${esc(product.name)}"
-            onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'">
-        </div>
-      </div>
-      <div class="product-detail-info">
-        <nav class="product-breadcrumb" aria-label="Breadcrumb">
-          <a href="./">Home</a>
-          <span>/</span>
-          <a href="store.html">Store</a>
-          <span>/</span>
-          <a href="store.html?cat=${encodeURIComponent(product.category || "")}">${esc(product.category || "Perfume")}</a>
-          <span>/</span>
-          <span>${esc(product.name)}</span>
-        </nav>
-        <p class="product-brand">Aura Lux</p>
-        <h1>${esc(ecommerceTitle)}</h1>
-        <div class="product-rating-row">
-          <span>Premium Perfume</span>
-        </div>
-        <div class="product-price-block">
-          <p class="product-price-label">Special price</p>
-          <p class="product-detail-price" id="productDetailPrice">&#8377;${getProductPrice(product, firstSize)}</p>
-        </div>
-        <div class="product-option-group">
-          <p>Size</p>
-          <div class="product-size-options">
-            ${sizes.map(size => `
-              <button class="product-size-btn ${size === firstSize ? "active" : ""}"
-                data-size="${size}"
-                data-price="${product.prices && product.prices[size] ? product.prices[size] : 0}"
-                ${product.prices && product.prices[size] ? "" : "disabled"}>${size.toUpperCase()}</button>
-            `).join("")}
-          </div>
-        </div>
-        <div class="product-quantity">
-          <p>Quantity</p>
-          <div class="qty-control">
-            <button id="qtyMinus" type="button">-</button>
-            <input id="productQty" type="number" min="1" value="1" inputmode="numeric">
-            <button id="qtyPlus" type="button">+</button>
-          </div>
-        </div>
-        <div class="product-actions">
-          <button class="product-wa-btn" id="productWhatsApp">Buy on WhatsApp</button>
-          <button class="product-wishlist-btn ${isLiked ? "liked" : ""}" id="productWishlist">${isLiked ? "Saved" : "Add to Wishlist"}</button>
-        </div>
-        <div class="product-description">
-          <h2>Product Description</h2>
-          <p>${esc(description)}</p>
-        </div>
-        <div class="product-details-box">
-          <h2>Product Details</h2>
-          <dl>
-            <div><dt>Brand</dt><dd>Aura Lux</dd></div>
-            <div><dt>Fragrance Type</dt><dd>Eau De Parfum</dd></div>
-            <div><dt>Category</dt><dd>${esc(product.category || "Perfume")}</dd></div>
-            <div><dt>Size</dt><dd id="productSelectedSize">${firstSize.toUpperCase()}</dd></div>
-            <div><dt>Ideal For</dt><dd>Men &amp; Women</dd></div>
-            <div><dt>Country/Region</dt><dd>Kerala, India</dd></div>
-          </dl>
-        </div>
-        ${notes ? `
-          <div class="product-notes-box">
-            <h2>Fragrance Notes</h2>
-            <p>${esc(notes)}</p>
-          </div>
-        ` : ""}
-      </div>
-    </section>
-    <div class="product-sticky-buy">
-      <button id="productStickyWhatsApp">Buy on WhatsApp</button>
-    </div>`;
-  hydrateImages().catch(e => console.error('[Images] hydrateImages failed', e));
-  let selectedSize = firstSize;
-  let selectedPrice = getProductPrice(product, selectedSize);
-  const priceEl = document.getElementById("productDetailPrice");
-  const selectedSizeEl = document.getElementById("productSelectedSize");
-  const qtyInput = document.getElementById("productQty");
-  const setQty = value => {
-    const next = Math.max(1, parseInt(value, 10) || 1);
-    qtyInput.value = String(next);
-  };
-  root.querySelectorAll(".product-size-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      if (btn.disabled) return;
-      root.querySelectorAll(".product-size-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      selectedSize = btn.dataset.size;
-      selectedPrice = Number(btn.dataset.price || 0);
-      if (priceEl) priceEl.textContent = "\u20b9" + selectedPrice;
-      if (selectedSizeEl) selectedSizeEl.textContent = selectedSize.toUpperCase();
-    });
-  });
-  document.getElementById("qtyMinus").addEventListener("click", () => setQty((parseInt(qtyInput.value, 10) || 1) - 1));
-  document.getElementById("qtyPlus").addEventListener("click", () => setQty((parseInt(qtyInput.value, 10) || 1) + 1));
-  qtyInput.addEventListener("input", () => setQty(qtyInput.value));
-  const openProductWhatsApp = () => {
-    const qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
-    const pageLink = location.href;
-    const msg = encodeURIComponent(
-      `Hi, I want to buy ${product.name} from Aura Lux.\n\nSize: ${selectedSize.toUpperCase()}\nQuantity: ${qty}\nPrice: ₹${selectedPrice}\nProduct: ${pageLink}`
-    );
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
-  };
-  document.getElementById("productWhatsApp").addEventListener("click", openProductWhatsApp);
-  document.getElementById("productStickyWhatsApp").addEventListener("click", openProductWhatsApp);
-  document.getElementById("productWishlist").addEventListener("click", () => {
-    const list = getWishlist();
-    const idx = list.findIndex(w => w.name === product.name);
-    if (idx >= 0) {
-      list.splice(idx, 1);
-    } else {
-      list.push({ name: product.name, image: bottleCandidates[0] || PLACEHOLDER_IMAGE, price: selectedPrice });
-    }
-    saveWishlist(list);
-    updateWishlistCount();
-    const liked = idx < 0;
-    const btn = document.getElementById("productWishlist");
-    btn.classList.toggle("liked", liked);
-    btn.textContent = liked ? "Saved" : "Add to Wishlist";
-    syncHeartButtons();
-  });
-}
+
 // ===== GLOBAL CLICK HANDLER =====
 document.addEventListener("click", e => {
   // ── Heart / wishlist toggle ──
@@ -719,22 +618,19 @@ document.addEventListener("click", e => {
     const idx   = list.findIndex(w => w.name === name);
     if (idx >= 0) {
       list.splice(idx, 1);
-      setHeartButtonState(btn, false);
+      btn.classList.remove("liked");
+      btn.textContent = "♡";
     } else {
       list.push({ name, image, price });
-      setHeartButtonState(btn, true);
+      btn.classList.add("liked");
+      btn.textContent = "♥";
     }
     saveWishlist(list);
     updateWishlistCount();
     return; // don't fall through to buy handler
   }
+
   // ── Size selector ──
-  const productCard = e.target.closest(".product-card");
-  if (productCard && !e.target.closest("a")) {
-    const id = productCard.dataset.productId;
-    if (id) window.location.href = productUrl(id);
-    return;
-  }
   if (e.target.closest(".size-btn")) {
     const btn   = e.target.closest(".size-btn");
     const card  = btn.closest(".card");
@@ -742,6 +638,7 @@ document.addEventListener("click", e => {
     const buyBtn  = card.querySelector(".btn-buy");
     const size    = btn.dataset.size;
     const price   = btn.dataset.price;
+
     card.querySelectorAll(".size-btn").forEach(b => {
       b.classList.remove("active");
       b.style.background = "transparent";
@@ -750,6 +647,7 @@ document.addEventListener("click", e => {
     btn.classList.add("active");
     btn.style.background = "linear-gradient(135deg,#d4a64f,#8a6826)";
     btn.style.color = "#fff";
+
     if (priceEl) priceEl.textContent = "₹" + price;
     if (buyBtn) {
       buyBtn.dataset.price = price;
@@ -761,6 +659,7 @@ document.addEventListener("click", e => {
     if (heartBtn) heartBtn.dataset.price = price;
     return;
   }
+
   // ── Buy button ──
   const buyBtn = e.target.closest("[data-buy]");
   if (buyBtn && !buyBtn.closest(".wishlist-sidebar")) {
@@ -773,11 +672,13 @@ document.addEventListener("click", e => {
     buyOnWhatsApp(`${name}${sizeInfo}${price ? " - ₹" + price : ""}`);
     return;
   }
+
   // ── WhatsApp FAB ──
   if (e.target.closest("#fabWA")) {
     inquireOnWhatsApp();
   }
 });
+
 // ===== ANIMATIONS =====
 function initRevealAnimations() {
   const obs = new IntersectionObserver(entries => {
@@ -787,12 +688,14 @@ function initRevealAnimations() {
   }, { threshold: 0.15 });
   document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
 }
+
 // ===== HERO SLIDER =====
 function initHeroSlider() {
   const slides = document.querySelectorAll(".hero-slide");
   const dots   = document.querySelectorAll(".hero-dot");
   if (!slides.length) return;
   let current = 0;
+
   function goTo(i) {
     slides[current].classList.remove("active");
     dots[current] && dots[current].classList.remove("active");
@@ -800,9 +703,11 @@ function initHeroSlider() {
     slides[current].classList.add("active");
     dots[current] && dots[current].classList.add("active");
   }
+
   dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
   setInterval(() => goTo((current + 1) % slides.length), 5000);
 }
+
 // ===== SPLASH =====
 function initSplash() {
   const s = document.getElementById("splash");
@@ -814,6 +719,7 @@ function initSplash() {
     try { sessionStorage.setItem("aura-splash-shown", "1"); } catch {}
   }, 2800);
 }
+
 // ===== SCROLL TO TOP =====
 function initScrollTop() {
   const btn = document.getElementById("scrollTopBtn");
@@ -823,6 +729,7 @@ function initScrollTop() {
   });
   btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 }
+
 // ===== IMAGE HYDRATOR =====
 async function hydrateImages() {
   const imgs = Array.from(document.querySelectorAll('img[data-candidates]'));
@@ -853,6 +760,7 @@ async function hydrateImages() {
   const wrap = img.closest('.img-wrap');
   if (wrap) wrap.classList.add('loaded');
 };
+
 img.src = chosen;
         console.debug('[Images] loaded', chosen, 'for', img.alt || img.dataset.name || 'unknown');
       } else {
@@ -865,6 +773,7 @@ img.src = chosen;
     }
   }
 }
+
 // ===== BOOT =====
 document.addEventListener("DOMContentLoaded", () => {
   if (window.__AURA_BOOTED) return;
@@ -872,6 +781,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Year
   const y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
+
   // Mobile menu
   const menuToggle = document.querySelector(".menu-toggle");
   const navLinks   = document.querySelector(".nav-links");
@@ -887,11 +797,13 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
   initSplash();
   initHeroSlider();
   initRevealAnimations();
   initScrollTop();
   initWishlist(); // ← FIXED: wires up the sidebar open/close + render
+
   // Fetch data then render
   Promise.all([
     fetchPerfumesFromSheet().catch(e => { console.error("[Boot] Perfume fetch failed:", e); return null; }),
@@ -901,6 +813,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window._auraReadyCb) { window._auraReadyCb(); window._auraReadyCb = null; }
   });
 });
+
 // ===== AURA NAMESPACE =====
 window.AURA = {
   PERFUMES: () => PERFUMES,
@@ -910,9 +823,9 @@ window.AURA = {
   fetchPerfumesFromSheet,
   fetchCombosFromSheet,
   renderHome,
-  initStorePage,
-  initProductPage
+  initStorePage
 };
+
 window.onAuraReady = function(cb) {
   if (PERFUMES.length > 0) { cb(); } else { window._auraReadyCb = cb; }
 };
